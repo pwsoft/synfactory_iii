@@ -1,43 +1,37 @@
 include(maker.m4)
+divert(-1)
+define(EXENAME,[synfactory_iii])
 define(PROGRAM,[SynFactory III])
 define(VERSION,[20100327])
 
-sysinclude([stdlib.h])
-sysinclude([stdio.h])
-sysinclude([string.h])
+const([static const char theProgramName[]="]PROGRAM - VERSION[";])
+include([synfactory_logfile.m4])
+include([synfactory_perlin.m4])
+divert[]dnl
 
-init([init_files();])
-term([term_files();])
+/* -------------------------------------------------------------------- */
+block([Includes])dnl
+__sysincludes[]dnl
 
-init([init_gui();])
-term([term_gui();])
-enum([GuiEvent], [GUIEVENT_RIGHT_CLICK])
-enum([GuiEvent], [GUIEVENT_LEFT_CLICK])
-enum([GuiEvent], [GUIEVENT_REDRAW])
-
-----------------------------------------------
-dumpdef([__enum_GuiEvent])
-dumpdef([__sysincludes])
-dumpdef([init])
-dumpdef([__init])
-dumpdef([__enums])
-__windows__
-__unix__
-
-----------------------------------------------
-block([Includes])
-__sysincludes
-
-block([Enums])
+block([Enums])dnl
 __enums[]dnl
 
-block([Constants])
-static const char theProgramName[]="PROGRAM - VERSION";
+block([Structs])dnl
+__structs[]dnl
 
-block([Main])
+block([Constants])dnl
+__const[]dnl
+
+block([Code])
+__code1[]dnl
+__code2[]dnl
+__code3[]dnl
+__code4[]dnl
+
+linefile[]block([Main])
 [int main(int argc, char **argv) {]
 __init[]
-[    eventloop();]
+/* [    eventloop();] */
 __term[]
 [    return 0;
 }]
