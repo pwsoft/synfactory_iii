@@ -1,4 +1,4 @@
-module('Support logfile')
+module([Logfile])
 sysinclude([stdarg.h])
 sysinclude([stdio.h])
 

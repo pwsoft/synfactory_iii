@@ -1,0 +1,3 @@
+module([audio])
+
+mutex([theAudioMutex])

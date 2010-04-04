@@ -1,0 +1,3 @@
+module([midi])
+
+mutex([theMidiMutex])
