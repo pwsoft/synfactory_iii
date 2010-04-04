@@ -5,7 +5,7 @@ module([main])
 #
 code9([block([Event loop])
 [void eventloop(void) {]
-__eventloop
+indent(1,[__eventloop])
 [}]
 ])
 
@@ -14,9 +14,9 @@ __eventloop
 #
 code9([block([Main])
 [int main(int argc, char **argv) {]
-__init[]
+indent(1,[__init])
 /* [    eventloop();] */
-__term[]
+indent(1,[__term])
 [    return 0;
 }]
 ])
