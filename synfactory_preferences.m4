@@ -1,0 +1,4 @@
+module([preferences])
+
+window([thePreferencesWindow])
+

@@ -12,30 +12,30 @@ static int __cdecl logprintf(const char *formatstr, ...) {
 #else
 static int logprintf(const char *formatstr, ...) {
 #endif
-        int retval=0;
+	int retval=0;
 
-        va_list(arglist);
-        va_start(arglist, formatstr);
-        if (theLogfile) {
-                retval=vfprintf(theLogfile, formatstr, arglist);
-                fflush(theLogfile);
-        }
+	va_list(arglist);
+	va_start(arglist, formatstr);
+	if (theLogfile) {
+			retval=vfprintf(theLogfile, formatstr, arglist);
+			fflush(theLogfile);
+	}
 
-        va_end(arglist);
-        return retval;
+	va_end(arglist);
+	return retval;
 }
 
 static void createLogfile(const char *aLogFileName) {
-        if (theLogfile) {
-                fclose(theLogfile);
-                theLogfile=NULL;
-        }
-        if (aLogFileName) {
-                theLogfile=fopen(aLogFileName, "w");
-                if (theLogfile) {
-                        logprintf("Logfile '%s' created.\n", aLogFileName);
-                }
-        }
+	if (theLogfile) {
+			fclose(theLogfile);
+			theLogfile=NULL;
+	}
+	if (aLogFileName) {
+			theLogfile=fopen(aLogFileName, "w");
+			if (theLogfile) {
+					logprintf("Logfile '%s' created.\n", aLogFileName);
+			}
+	}
 }
 ])
 

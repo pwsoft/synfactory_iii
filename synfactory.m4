@@ -1,4 +1,13 @@
 divert(-1)
+# ########################################################################
+#
+# SynFactory III
+#
+# The desktop modular Audio/Video studio.
+# Copyright (C) 2002-2010  Peter Wendrich (pwsoft@syntiac.com)
+# Homepage: http://www.syntiac.com/synfactory.html
+#
+# ########################################################################
 include(maker.m4)
 define(PLATFORM,[win32])
 define(EXENAME,[synfactory_iii])
@@ -9,19 +18,21 @@ const([static const char theProgramName[]="]PROGRAM - VERSION[";])
 platforminclude([synfactory_logfile])
 platforminclude([synfactory_threads])
 platforminclude([synfactory_gui])
+platforminclude([synfactory_main])
 platforminclude([synfactory_audio])
 platforminclude([synfactory_midi])
 platforminclude([synfactory_objects])
 platforminclude([synfactory_perlin])
 platforminclude([synfactory_dsp])
+platforminclude([synfactory_preferences])
+platforminclude([synfactory_projects])
 platforminclude([synfactory_transport])
-platforminclude([synfactory_main])
 divert[]dnl
 block([[
 * SynFactory III
 *
 * Copyright (C) 2002-2010  Peter Wendrich (pwsoft@syntiac.com)
-* Homepage: http://www.syntiac.com/synfactory_iii.html
+* Homepage: http://www.syntiac.com/synfactory.html
 *
 ***********************************************************************
 *

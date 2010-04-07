@@ -1,2 +1,2 @@
 module([transport])
-window([transportWindow])
+window([theTransportWindow])

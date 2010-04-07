@@ -1,1 +1,2 @@
-window([mainWindow])
+module([main])
+window([theMainWindow])
