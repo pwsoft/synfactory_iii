@@ -39,5 +39,5 @@ static void createLogfile(const char *aLogFileName) {
 }
 ])
 
-init([createLogfile("]EXENAME[.log");])
-term([logprintf("Closing ]EXENAME[ logfile.\n");])
+Init([createLogfile("]EXENAME[.log");])
+Term([logprintf("Closing ]EXENAME[ logfile.\n");])

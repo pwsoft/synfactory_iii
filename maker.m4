@@ -3,6 +3,7 @@ changequote(`[', `]')
 # Initialise empty lists. Prevents syntax errors during compilation when certain macros are never filled.
 #
 define([__defs],)
+define([__consts],)
 define([__enums],)
 define([__structs],)
 define([__code1],)
@@ -16,11 +17,12 @@ define([__code8],)
 define([__code9],)
 
 #
-# Platform include, first include general include followed by platform specific file.
+# Platform include, first include general include followed by platform specific files.
 #
 define([platforminclude],
 	[sinclude($1.m4)]
-	[sinclude($1_[]PLATFORM[].m4)]
+	[sinclude($1_[]PLATFORM_OS[].m4)]
+	[sinclude($1_[]PLATFORM_GUI[].m4)]
 )
 
 #
@@ -34,12 +36,16 @@ define([indent],[patsubst(defn([$2]),[^],substr([										],0,$1))])
 # MacroBack adds new string at the end of the existing strings.
 # All strings are separated by a newline
 #
-define([MacroFront], [define([$1],[$2]
-defn([$1]))])
+define([MacroFront], [define([$1],[]
+[$2]defn([$1]))])
 define([MacroBack], [define([$1],defn([$1])
 [$2])])
 define([MacroBackCont], [define([$1],defn([$1])[$2])])
 
+#
+# Support for the 'enum' and 'struct' macros.
+#
+#
 define([CreateEnum],[
 	MacroBack([__enums],[__enum_$1])
 	define([__enum_$1],[[typedef enum _$1 {]indent(1,[__enum_$1_values])
@@ -54,13 +60,14 @@ define([block],
 * $1
 \*********************************************************************/])
 define([sysinclude], [ifdef([__sysincludes_$1],,[define([__sysincludes_$1],)MacroBack([__sysincludes],[[#include <$1>]])])])
-define([init], [MacroBack]([[__init]],[[[$1]]]))
-define([term], [MacroFront]([[__term]],[[[$1]]]))
-define([enum], [ifdef([__enum_$1],[MacroBackCont]([[__enum_$1_values]],[[,]]),[CreateEnum([$1])])][MacroBack]([[__enum_$1_values]],[[$2]]))
-define([struct], [ifdef([__struct_$1],,[CreateStruct([$1])])][MacroBack]([[__struct_$1_values]],[[$2]]))
-define([def], [MacroBack]([[__defs]],[[[$1]]]))
-define([const], [MacroBack]([[__const]],[[[$1]]]))
-define([var], [MacroBack]([[__vars]],[[[$1]]]))
+define([Init], [MacroBack]([[__init]],[[[$1]]]))
+define([Term], [MacroFront]([[__term]],[[[$1]]]))
+define([Enum], [ifdef([__enum_$1],[MacroBackCont]([[__enum_$1_values]],[[,]]),[CreateEnum([$1])])][MacroBack]([[__enum_$1_values]],[[[$2]]]))
+define([Struct], [ifdef([__struct_$1],,[CreateStruct([$1])])][MacroBack]([[__struct_$1_values]],[[[$2]]]))
+define([Def], [MacroBack]([[__defs]],[[[$1]]]))
+define([Const], [MacroBack]([[__consts]],[[[$1]]]))
+define([Var], [MacroBack]([[__vars]],[[[$1]]]))
+
 #
 # Code block macros. Depending on required order take one of the blocks.
 # Library and support routines must use low numbers, toplevel functions use higher number.

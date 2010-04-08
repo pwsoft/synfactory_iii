@@ -9,12 +9,13 @@ divert(-1)
 #
 # ########################################################################
 include(maker.m4)
-define(PLATFORM,[win32])
+define(PLATFORM_OS,[win32])
+define(PLATFORM_GUI,[gdi])
 define(EXENAME,[synfactory_iii])
 define(PROGRAM,[SynFactory III])
 define(VERSION,[20100327])
 
-const([static const char theProgramName[]="]PROGRAM - VERSION[";])
+Const([static const char theProgramName[]="]PROGRAM - VERSION[";])
 platforminclude([synfactory_logfile])
 platforminclude([synfactory_threads])
 platforminclude([synfactory_gui])
@@ -26,6 +27,7 @@ platforminclude([synfactory_perlin])
 platforminclude([synfactory_dsp])
 platforminclude([synfactory_preferences])
 platforminclude([synfactory_projects])
+platforminclude([synfactory_patcheditor])
 platforminclude([synfactory_transport])
 divert[]dnl
 block([[
@@ -52,7 +54,7 @@ block([Structs])dnl
 __structs[]dnl
 
 block([Constants])dnl
-__const[]dnl
+__consts[]dnl
 
 block([Variables])dnl
 __vars[]dnl

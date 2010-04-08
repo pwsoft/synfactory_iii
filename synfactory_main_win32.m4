@@ -1,5 +1,6 @@
-module([main])
-var([static bool theQuitFlag = false;])
+module([main (win32)])
+
+Var([static bool theQuitFlag = false;])
 
 #
 # The eventloop

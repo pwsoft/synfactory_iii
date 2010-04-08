@@ -2,7 +2,7 @@
 # Object macros
 #
 define([defobj],[
-	enum([Objects],$1)
+	Enum([Objects],$1)
 	MacroBack([__ObjectTitles],[		case $1: return "$2";])
 	ifelse($3,,,[MacroBack([__ObjectKeys],[		case '$3': return $1;])])
 	ifelse($7,NULL,,[MacroBack([__ObjectMenus],[		case $1: return $7;])])
@@ -12,30 +12,30 @@ define([defobj],[
 # Object support functions
 #
 sysinclude([assert.h])
-code1([static const char *object_title(Objects aObject) {
-	switch(aObject) {]
+code1([[static const char *object_title(Objects aObject) {
+	switch(aObject) {]]
 __ObjectTitles
 		default:
 			break;
-[	}
+[[	}
 	return "???";
-}])
+}]])
 
-code1([static Objects key_to_object(int aKey) {
-	switch(aKey) {]
+code1([[static Objects key_to_object(int aKey) {
+	switch(aKey) {]]
 __ObjectKeys
-[	}
+[[	}
 	return OBJECT_NONE;
-}])
+}]])
 
-code1([static const char *object_to_menu(Objects aObject) {
-	switch(aObject) {]
+code1([[static const char *object_to_menu(Objects aObject) {
+	switch(aObject) {]]
 __ObjectMenus
 		default:
 			break;
-[	}
+[[	}
 	return NULL;
-}])
+}]])
 
 #
 # Object definitions
