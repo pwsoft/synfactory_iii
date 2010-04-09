@@ -4,6 +4,10 @@ SynFactory III
 This is the third generation of the Desktop audio/video studio based on
 modular synthesizer techniques.
 
+
+Source structure
+-------------------
+
 The SynFactory tree consists of many small files that are parsed and combined
 together with the m4 macro processor. The use of this pre-prosessing step
 allows some action be done during compilation. In previous versions the same
@@ -13,20 +17,23 @@ better. This process generates a single cpp file that is compiled to optain
 the application. To be able to combine all the files correctly into an
 application, they must obey certain rules.
 
-
 Compilation
 -------------------
 
 To generate the .cpp file run the m4 macro processor on the synfactory.m4
 file. This will first include maker.m4, which contains all the generic build
-macros. The files use [ and ] as quotation markers. The default markers can
-cause problems as the same characters are used in C++ code. The [ and ]
+macros. The files use [ and ] as quotation markers. The default markers of m4
+can cause problems as the same characters are used in C++ code. The [ and ]
 markers are less problemetic as they are always used in pairs in normal C++
-code and are therefore always balanced.
+code and are therefore normally always balanced.
 
 The main code weaving macros are MacroBack and MacroFront that collect code
 incrementally. Most other macros are build up from these two. All code is
 processed and collected into hidden macros that start with double underscore.
 __defs, __const, __enums, __structs, __code1 .. __code9
 
-The final file consists of the concatination of contents of all these macros.
+The final file contents is a concatination of the contents of all these macros.
+
+
+
+

@@ -6,7 +6,7 @@ Var([static bool theQuitFlag = false;])
 # The eventloop
 #
 code9([block([Event loop])
-[void eventloop(void) {
+[static void eventloop(void) {
 	while (!theQuitFlag) {
 		MSG myMsg;
 		switch (GetMessage(&myMsg,NULL,0,0)) {
@@ -35,8 +35,8 @@ code9([block([Main])
 	theInstance = hInstance;]
 [// int main(int argc, char **argv) {]
 indent(1,[__init])
-[    eventloop();]
+[	eventloop();]
 indent(1,[__term])
-[    return 0;
+[	return 0;
 }]
 ])
