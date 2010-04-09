@@ -1,4 +1,4 @@
 module([preferences])
 
-window([thePreferencesWindow])
+window([thePreferencesWindow], "Preferences")
 

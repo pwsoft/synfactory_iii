@@ -5,4 +5,4 @@ Struct([project_t], [bool selected;])
 Struct([project_t], [bool unfolded;])
 Struct([project_t], [const char *file_name;])
 
-window([theProjectsWindow])
+window([theProjectsWindow], "Project Browser")

@@ -1,2 +1,3 @@
 module([transport])
-window([theTransportWindow])
+
+window([theTransportWindow], "Transport Control")

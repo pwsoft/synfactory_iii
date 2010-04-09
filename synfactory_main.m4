@@ -1,2 +1,3 @@
 module([main])
-window([theMainWindow])
+
+window([theMainWindow], "SF3")
