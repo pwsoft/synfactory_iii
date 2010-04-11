@@ -1,3 +1,3 @@
 module([main])
 
-window([theMainWindow], "SF3", 400, 400)
+Window([theMainWindow], ["SF3"], [NULL], 400, 400)

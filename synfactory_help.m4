@@ -1,3 +1,3 @@
 module([help/about window])
 
-window([theHelpWindow], ["About"], 400, 400)
+Window([theHelpWindow], ["About"], NULL, 400, 400)

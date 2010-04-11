@@ -1,4 +1,4 @@
 module([preferences])
 
-window([thePreferencesWindow], "Preferences", 400, 400)
+Window([thePreferencesWindow], ["Preferences"], [NULL], 400, 400)
 

@@ -4,10 +4,11 @@ Const([static const char * const mainWindowClass="StudioFactoryMainClass";])
 Var([static HINSTANCE theInstance;])
 Var([static ATOM mainClassAtom;])
 
-define([window],[
+# 1=name, 2=title, 3=handler, 4=xsize, 5=ysize
+define([Window],[
 	Var([static HWND $1;])
 	Var([static bool $1Refresh;])
-	Init([$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $3, $4, theMainWindow, NULL, theInstance, NULL);])
+	Init([$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);])
 	Init([UpdateWindow($1);])
 	Term([DestroyWindow($1);])
 	MacroBack([__eventloop],[if ($1Refresh) {
@@ -15,6 +16,7 @@ define([window],[
 	$1Refresh=false;
 }])
 ])
+
 
 code8([[
 static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
