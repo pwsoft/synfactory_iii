@@ -1,8 +1,8 @@
 module([projects])
 
-Struct([project_t], [const char *name;])
-Struct([project_t], [bool selected;])
-Struct([project_t], [bool unfolded;])
-Struct([project_t], [const char *file_name;])
+Struct([Project], [const char *name;])
+Struct([Project], [bool selected;])
+Struct([Project], [bool unfolded;])
+Struct([Project], [const char *file_name;])
 
 Window([theProjectsWindow], "Project Browser", [NULL], 400, 400)

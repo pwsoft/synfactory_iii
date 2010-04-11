@@ -49,11 +49,11 @@ define([MacroBackCont], [define([$1],defn([$1])[$2])])
 define([CreateEnum],[
 	MacroBack([__enums],[__enum_$1])
 	define([__enum_$1],[[typedef enum _$1 {]indent(1,[__enum_$1_values])
-[} $1;]])])
+[} $1_t;]])])
 define([CreateStruct], [
 	MacroFront([__structs],[__struct_$1])
 	define([__struct_$1],[[typedef struct _$1 {]indent(1,[__struct_$1_values])
-[} $1;]])])
+[} $1_t, *$1_ptr_t;]])])
 
 define([block],
 [/*********************************************************************\
@@ -73,23 +73,22 @@ define([Var], [MacroBack]([[__vars]],[[[$1]]]))
 # Library and support routines must use low numbers, toplevel functions use higher number.
 # This ordering required less forward declarations for the functions.
 #
-define([linefile],[[#]line __line__ "__file__"])
-define([code1], [MacroBack]([[__code1]],[linefile]
+define([code1], [MacroBack]([[__code1]],
 [[$1]]))
-define([code2], [MacroBack]([[__code2]],[linefile]
+define([code2], [MacroBack]([[__code2]],
 [[$1]]))
-define([code3], [MacroBack]([[__code3]],[linefile]
+define([code3], [MacroBack]([[__code3]],
 [[$1]]))
-define([code4], [MacroBack]([[__code4]],[linefile]
+define([code4], [MacroBack]([[__code4]],
 [[$1]]))
-define([code5], [MacroBack]([[__code5]],[linefile]
+define([code5], [MacroBack]([[__code5]],
 [[$1]]))
-define([code6], [MacroBack]([[__code6]],[linefile]
+define([code6], [MacroBack]([[__code6]],
 [[$1]]))
-define([code7], [MacroBack]([[__code7]],[linefile]
+define([code7], [MacroBack]([[__code7]],
 [[$1]]))
-define([code8], [MacroBack]([[__code8]],[linefile]
+define([code8], [MacroBack]([[__code8]],
 [[$1]]))
-define([code9], [MacroBack]([[__code9]],[linefile]
+define([code9], [MacroBack]([[__code9]],
 [[$1]]))
 define([module],[MacroBack([__modules],*	[[$1]]substr([]                              ,len([$1]))"__file__")])

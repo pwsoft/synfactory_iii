@@ -12,7 +12,7 @@ define([defobj],[
 # Object support functions
 #
 sysinclude([assert.h])
-code1([[static const char *object_title(Objects aObject) {
+code1([[static const char *object_title(Objects_t aObject) {
 	switch(aObject) {]]
 __ObjectTitles
 		default:
@@ -21,14 +21,14 @@ __ObjectTitles
 	return "???";
 }]])
 
-code1([[static Objects key_to_object(int aKey) {
+code1([[static Objects_t key_to_object(int aKey) {
 	switch(aKey) {]]
 __ObjectKeys
 [[	}
 	return OBJECT_NONE;
 }]])
 
-code1([[static const char *object_to_menu(Objects aObject) {
+code1([[static const char *object_to_menu(Objects_t aObject) {
 	switch(aObject) {]]
 __ObjectMenus
 		default:

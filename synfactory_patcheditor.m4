@@ -1,9 +1,9 @@
 module([patch editor])
 
-Struct([project_t], [int noof_patches;])
-Struct([project_t], [patch_t *patches;])
+Struct([Project], [int noof_patches;])
+Struct([Project], [Patch_ptr_t patches;])
 
-Struct([patch_t], [const char *name;])
-Struct([patch_t], [bool selected;])
-Struct([patch_t], [bool unfolded;])
+Struct([Patch], [const char *name;])
+Struct([Patch], [bool selected;])
+Struct([Patch], [bool unfolded;])
 
