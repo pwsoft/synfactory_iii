@@ -2,6 +2,7 @@ module([GUI (gdi)])
 
 Struct([Context], [HWND currentWindow;])
 Struct([Context], [HDC currentHdc;])
+Typedef([typedef int color_t;])
 
 Const([static const char * const mainWindowClass="StudioFactoryMainClass";])
 Var([static HINSTANCE theInstance;])

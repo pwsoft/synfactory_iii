@@ -55,6 +55,9 @@ __defs[]dnl
 block([Enums])dnl
 __enums[]dnl
 
+block([Type defs])dnl
+__typedefs[]dnl
+
 block([Structs])dnl
 __structs[]dnl
 
