@@ -2,7 +2,7 @@ module([Logfile])
 sysinclude([stdarg.h])
 sysinclude([stdio.h])
 
-code1([
+code2([
 //
 // Write formatted output to logfile
 //

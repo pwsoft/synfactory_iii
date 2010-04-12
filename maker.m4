@@ -43,13 +43,24 @@ define([MacroBack], [define([$1],defn([$1])
 define([MacroBackCont], [define([$1],defn([$1])[$2])])
 
 #
-# Support for the 'enum' and 'struct' macros.
+# Support for the 'Enum' macro
 #
 #
 define([CreateEnum],[
 	MacroBack([__enums],[__enum_$1])
 	define([__enum_$1],[[typedef enum _$1 {]indent(1,[__enum_$1_values])
-[} $1_t;]])])
+[} $1_t;]])
+	code1([[static const char *convert$1ToString($1_t aValue) {]
+	switch(aValue) {indent(2,[__enum_$1_convert])
+		default: break;
+	}
+	return "???";
+}])
+])
+#
+# Support for the 'Struct' macro
+#
+#
 define([CreateStruct], [
 	MacroFront([__structs],[__struct_$1])
 	define([__struct_$1],[[typedef struct _$1 {]indent(1,[__struct_$1_values])
@@ -62,7 +73,12 @@ define([block],
 define([sysinclude], [ifdef([__sysincludes_$1],,[define([__sysincludes_$1],)MacroBack([__sysincludes],[[#include <$1>]])])])
 define([Init], [MacroBack]([[__init]],[[[$1]]]))
 define([Term], [MacroFront]([[__term]],[[[$1]]]))
-define([Enum], [ifdef([__enum_$1],[MacroBackCont]([[__enum_$1_values]],[[,]]),[CreateEnum([$1])])][MacroBack]([[__enum_$1_values]],[[[$2]]]))
+define([Enum],
+	[ifdef([__enum_$1],
+		[MacroBackCont]([[__enum_$1_values]],[[,]]),
+		[CreateEnum([$1])])]
+	[MacroBack]([[__enum_$1_values]],[[[$2]]])
+	[MacroBack]([[__enum_$1_convert]],[[[case $2: return "$2";]]]))
 define([Struct], [ifdef([__struct_$1],,[CreateStruct([$1])])][MacroBack]([[__struct_$1_values]],[[[$2]]]))
 define([Def], [MacroBack]([[__defs]],[[[$1]]]))
 define([Const], [MacroBack]([[__consts]],[[[$1]]]))

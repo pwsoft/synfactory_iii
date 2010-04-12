@@ -34,6 +34,19 @@ __defs, __const, __enums, __structs, __code1 .. __code9
 
 The final file contents is a concatination of the contents of all these macros.
 
+Code blocks
+-------------------
+
+code1
+	- convert enum to string functions
+code2
+	- Log file
+code3
+	- DSP Objects
+code7
+	- Application GUI layer
+code9
+	- Main
 
 
 
