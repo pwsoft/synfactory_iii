@@ -13,8 +13,7 @@ define([DefWindow],[
 	Var([static bool $1Refresh;])
 	Init(ifelse([$6],,
 		[$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);],
-		[$1 = CreateWindowEx(0, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);])
-	)
+		[$1 = CreateWindowEx(0, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);]))
 	Init([SetWindowLong($1, 0, (LONG)$3);])
 	Init([UpdateWindow($1);])
 	Term([DestroyWindow($1);])
@@ -49,7 +48,7 @@ static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 				myCallback(&myContext);
 			}
 
-			EndPaint(hwnd, &ps);    
+			EndPaint(hwnd, &ps);
 
 		} break;
 	case WM_CLOSE:
@@ -64,8 +63,9 @@ static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 	}
 	
 	return 0;
-}
+}]
 
+block([Create and register default window class])[
 static void createWindowClass(void) {
 	WNDCLASSEX myClass;
 	myClass.cbSize=sizeof(myClass);

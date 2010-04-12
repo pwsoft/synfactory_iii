@@ -2,10 +2,7 @@ module([Logfile])
 sysinclude([stdarg.h])
 sysinclude([stdio.h])
 
-code2([[
-//
-// Write formatted output to logfile
-//
+code2([block([Write formatted output to logfile])[
 static FILE *theLogfile=NULL;
 #ifdef _MSC_VER
 static int __cdecl logprintf(const char *formatstr, ...) {
