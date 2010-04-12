@@ -2,17 +2,18 @@
 # Object macros
 #
 define([defobj],[
-	Enum([Objects],$1)
-	MacroBack([__ObjectTitles],[		case $1: return "[$2]";])
-	ifelse([$3],,,[MacroBack([__ObjectKeys],[		case '$3': return [$1];])])
-	ifelse([$7],NULL,,[MacroBack([__ObjectMenus],[		case $1: return [$7];])])
+	Enum([Object],OBJECT_$1)
+	MacroBack([__ObjectTitles],[		case OBJECT_$1: return "[$2]";])
+	ifelse([$3],,,[MacroBack([__ObjectKeys],[		case '$3': return [OBJECT_$1];])])
+	ifelse([$7],NULL,,[MacroBack([__ObjectMenus],[		case OBJECT_$1: return [$7];])])
 ])
 
 #
 # Object support functions
 #
 sysinclude([assert.h])
-code1([[static const char *object_title(Objects_t aObject) {
+code3([[/* Get the module title for given object type */
+static const char *objectToTitle(Object_t aObject) {
 	switch(aObject) {]]
 __ObjectTitles
 		default:
@@ -21,14 +22,16 @@ __ObjectTitles
 	return "???";
 }]])
 
-code1([[static Objects_t key_to_object(int aKey) {
+code3([[/* Convert a key pressed on the keyboard to object type */
+static Object_t keyToObject(int aKey) {
 	switch(aKey) {]]
 __ObjectKeys
 [[	}
 	return OBJECT_NONE;
 }]])
 
-code1([[static const char *object_to_menu(Objects_t aObject) {
+code3([[/* Convert from object to menu name */
+static const char *objectToMenu(Object_t aObject) {
 	switch(aObject) {]]
 __ObjectMenus
 		default:
@@ -39,19 +42,19 @@ __ObjectMenus
 
 #
 # Object definitions
-#                                flags
-#                                  |
-#      Object id       Title  key  | dsp help menu
+#                           flags
+#                             |
+#      Object id  Title  key  | dsp help menu
 #
-defobj(OBJECT_NONE,    ---,      ,  ,   ,   , [NULL])
-defobj(OBJECT_UNKNOWN, ???,      ,  ,   ,   , [NULL])
-defobj(OBJECT_ADD,     ADD,     a,  ,   ,   , ["ADD - Adder\tA"])
-defobj(OBJECT_MUL,     MUL,     m,  ,   ,   , ["MUL - Multiplier/Ringmodulator\tM"])
-defobj(OBJECT_SUB,     SUB,     s,  ,   ,   , ["SUB - Subtractor\tU"])
-defobj(OBJECT_SPLIT,   SPLIT,   I,  ,   ,   , ["SPLIT - Positive and negative signal splitter\tShift+I"])
-defobj(OBJECT_MINMAX,  MINMAX,   ,  ,   ,   , ["MINMAX - Get minimum and maximum of two input signals"])
-defobj(OBJECT_BETWEEN, BETWEEN,  ,  ,   ,   , ["BETWEEN - Window comparator"])
-defobj(OBJECT_EXPLIN,  EXPLIN,   ,  ,   ,   , ["EXPLIN - Convert exponential input to linear range"])
+defobj([NONE],    ---,      ,  ,   ,   , [NULL])
+defobj([UNKNOWN], ???,      ,  ,   ,   , [NULL])
+defobj([ADD],     ADD,     a,  ,   ,   , ["ADD - Adder\tA"])
+defobj([MUL],     MUL,     m,  ,   ,   , ["MUL - Multiplier/Ringmodulator\tM"])
+defobj([SUB],     SUB,     s,  ,   ,   , ["SUB - Subtractor\tU"])
+defobj([SPLIT],   SPLIT,   I,  ,   ,   , ["SPLIT - Positive and negative signal splitter\tShift+I"])
+defobj([MINMAX],  MINMAX,   ,  ,   ,   , ["MINMAX - Get minimum and maximum of two input signals"])
+defobj([BETWEEN], BETWEEN,  ,  ,   ,   , ["BETWEEN - Window comparator"])
+defobj([EXPLIN],  EXPLIN,   ,  ,   ,   , ["EXPLIN - Convert exponential input to linear range"])
 
 # Cleanup
 #
