@@ -7,11 +7,14 @@ Const([static const char * const mainWindowClass="StudioFactoryMainClass";])
 Var([static HINSTANCE theInstance;])
 Var([static ATOM mainClassAtom;])
 
-# 1=name, 2=title, 3=handler, 4=xsize, 5=ysize
+# 1=name, 2=title, 3=handler, 4=xsize, 5=ysize, 6=main window flag
 define([DefWindow],[
 	Var([static HWND $1;])
 	Var([static bool $1Refresh;])
-	Init([$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);])
+	Init(ifelse([$6],,
+		[$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);],
+		[$1 = CreateWindowEx(0, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);])
+	)
 	Init([SetWindowLong($1, 0, (LONG)$3);])
 	Init([UpdateWindow($1);])
 	Term([DestroyWindow($1);])
@@ -22,7 +25,7 @@ define([DefWindow],[
 ])
 
 
-code8([[
+code8([block([Default window event handler])[
 typedef void (*GuiCallback_t)(Context_ptr_t);
 static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	Context_t myContext;
@@ -52,6 +55,8 @@ static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 	case WM_CLOSE:
 		if (hwnd == theMainWindow) {
 			PostQuitMessage(0);
+		} else {
+			ShowWindow(hwnd, SW_HIDE);
 		}
 		break;
 	default:

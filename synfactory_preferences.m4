@@ -1,4 +1,9 @@
 module([preferences])
 
-Window([thePreferencesWindow], ["Preferences"], [NULL], 400, 400)
+DefWindow([thePreferencesWindow], ["Preferences"], [preferencesWindowHandler], 400, 400)
+
+code7([[
+void preferencesWindowHandler(Context_t aContext) {
+}
+]])
 
