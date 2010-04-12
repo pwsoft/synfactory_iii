@@ -1,1 +1,1 @@
-module([midi_win32])
+module([midi (win32)])

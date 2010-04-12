@@ -1,3 +1,3 @@
 module([midi])
 
-mutex([theMidiMutex])
+DefMutex([theMidiMutex])

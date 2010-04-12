@@ -2,7 +2,7 @@ module([Logfile])
 sysinclude([stdarg.h])
 sysinclude([stdio.h])
 
-code2([
+code2([[
 //
 // Write formatted output to logfile
 //
@@ -37,7 +37,7 @@ static void createLogfile(const char *aLogFileName) {
 			}
 	}
 }
-])
+]])
 
 Init([createLogfile("]EXENAME[.log");])
 Term([logprintf("Closing ]EXENAME[ logfile.\n");])

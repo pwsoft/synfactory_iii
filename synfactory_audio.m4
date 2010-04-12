@@ -1,3 +1,3 @@
 module([audio])
 
-mutex([theAudioMutex])
+DefMutex([theAudioMutex])

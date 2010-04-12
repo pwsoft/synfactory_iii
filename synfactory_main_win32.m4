@@ -5,8 +5,8 @@ Var([static bool theQuitFlag = false;])
 #
 # The eventloop
 #
-code9([block([Event loop])
-[static void eventloop(void) {
+code9([block([Event loop])[
+static void eventloop(void) {
 	while (!theQuitFlag) {
 		MSG myMsg;
 		switch (GetMessage(&myMsg,NULL,0,0)) {
@@ -17,8 +17,8 @@ code9([block([Event loop])
 			TranslateMessage(&myMsg);
 			DispatchMessage(&myMsg);
 ]
-indent(3,[__eventloop])
-[			break;
+indent(3,[__eventloop])[
+			break;
 		default:
 			theQuitFlag = true;
 			break;

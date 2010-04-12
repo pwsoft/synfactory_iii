@@ -1,1 +1,2 @@
-module([audio_win32])
+module([audio (win32)])
+
