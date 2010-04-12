@@ -8,7 +8,7 @@ Var([static HINSTANCE theInstance;])
 Var([static ATOM mainClassAtom;])
 
 # 1=name, 2=title, 3=handler, 4=xsize, 5=ysize
-define([Window],[
+define([DefWindow],[
 	Var([static HWND $1;])
 	Var([static bool $1Refresh;])
 	Init([$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);])

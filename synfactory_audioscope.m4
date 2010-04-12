@@ -1,6 +1,6 @@
 module([audio output scope])
 
-Window([theAudioOutputScope], "Audio Output Scope", [audioOutputScopeHandler], 400, 400)
+DefWindow([theAudioOutputScope], "Audio Output Scope", [audioOutputScopeHandler], 400, 400)
 
 
 code7([block([Audio Output Scope Handler])[

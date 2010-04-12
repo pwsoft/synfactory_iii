@@ -1,3 +1,3 @@
 module([transport])
 
-Window([theTransportWindow], "Transport Control", NULL, 256, 64)
+DefWindow([theTransportWindow], "Transport Control", NULL, 256, 64)
