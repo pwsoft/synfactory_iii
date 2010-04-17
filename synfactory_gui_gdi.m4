@@ -25,7 +25,7 @@ define([DefWindow],[
 ])
 
 
-code8([block([Default window event handler])[
+code8([block([Default window event handler (gdi)])[
 typedef void (*GuiCallback_t)(Context_ptr_t);
 static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	Context_t myContext;

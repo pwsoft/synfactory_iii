@@ -3,6 +3,7 @@
 #
 define([defobj],[
 	Enum([Object],[OBJECT_$1])
+	Enum([Menu], [MENU_OBJECT_$1])
 	MacroBack([__ObjectTitles],[		case OBJECT_$1: return "[$2]";])
 	ifelse([$3],,,[MacroBack([__ObjectKeys],[[		case '$3': return OBJECT_$1;]])])
 	ifelse([$7],NULL,,[MacroBack([__ObjectMenus],[[		case OBJECT_$1: return $7;]])])

@@ -1,2 +1,0 @@
-module([menu (win32)])
-

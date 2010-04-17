@@ -22,6 +22,7 @@ platforminclude([synfactory_arealist])
 platforminclude([synfactory_gui])
 platforminclude([synfactory_menu])
 platforminclude([synfactory_main])
+platforminclude([synfactory_mainmenu])
 platforminclude([synfactory_audio])
 platforminclude([synfactory_midi])
 platforminclude([synfactory_objects])
@@ -67,7 +68,6 @@ __consts[]dnl
 block([Variables])dnl
 __vars[]dnl
 
-block([Code])
 __code1[]dnl
 __code2[]dnl
 __code3[]dnl
