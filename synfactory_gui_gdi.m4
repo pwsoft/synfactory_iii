@@ -2,6 +2,7 @@ module([GUI (gdi)])
 
 Struct([Context], [HWND currentWindow;])
 Struct([Context], [HDC currentHdc;])
+Struct([Context], [RECT clientRect;])
 Typedef([typedef int color_t;])
 
 Const([static const char * const mainWindowClass="StudioFactoryMainClass";])
@@ -31,22 +32,37 @@ static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 	Context_t myContext;
 
 	switch(uMsg) {
+	case WM_COMMAND: {
+			if (HIWORD(wParam) == 0) {
+				myContext.currentEvent = GUI_EVENT_MENU;
+				myContext.currentWindow = hwnd;
+				myContext.currentMenu = (Menu_t)LOWORD(wParam);
+// TODO:				myContext.currentHdc = hdc;
+				GetClientRect(hwnd, &(myContext.clientRect));
+
+				logprintf("Menu item %d %s\n", LOWORD(wParam), convertMenuToString(myContext.currentMenu));
+
+				GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(hwnd, 0);
+				if (myCallback) {
+					myCallback(&myContext);					
+				}
+			}
+		} break;
 	case WM_PAINT: {
 			PAINTSTRUCT ps;
 			HDC hdc=BeginPaint(hwnd, &ps);
 
-			myContext.currentWindow = hwnd;
-			myContext.currentHdc = BeginPaint(hwnd, &ps);
 			myContext.currentEvent = GUI_EVENT_REFRESH;
-
-			RECT myClientRect;
-			GetClientRect(hwnd, &myClientRect);
-			SelectObject(hdc, GetStockObject(BLACK_BRUSH));
-			Rectangle(hdc, myClientRect.left, myClientRect.top, myClientRect.right, myClientRect.bottom);
+			myContext.currentWindow = hwnd;
+			myContext.currentHdc = hdc;
+			GetClientRect(hwnd, &(myContext.clientRect));
 
 			GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(hwnd, 0);
 			if (myCallback) {
 				myCallback(&myContext);
+			} else {
+				SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+				Rectangle(hdc, myContext.clientRect.left, myContext.clientRect.top, myContext.clientRect.right, myContext.clientRect.bottom);
 			}
 
 			EndPaint(hwnd, &ps);
