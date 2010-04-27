@@ -13,17 +13,17 @@ define([defobj],[
 # Object support functions
 #
 sysinclude([assert.h])
-code3([[/* Get the module title for given object type */
+code3([block([[Get the module title for given object type]])[
 static const char *objectToTitle(Object_t aObject) {
 	switch(aObject) {]]
 __ObjectTitles
-		default:
+[[		default:
 			break;
-[[	}
+	}
 	return "???";
 }]])
 
-code3([[/* Convert a key pressed on the keyboard to object type */
+code3([block([[Convert a key pressed on the keyboard to object type]])[
 static Object_t keyToObject(int aKey) {
 	switch(aKey) {]]
 __ObjectKeys
@@ -31,13 +31,13 @@ __ObjectKeys
 	return OBJECT_NONE;
 }]])
 
-code3([[/* Convert from object to menu name */
+code3([block([[Convert from object to menu name]])[
 static const char *objectToMenu(Object_t aObject) {
 	switch(aObject) {]]
 __ObjectMenus
-		default:
+[[		default:
 			break;
-[[	}
+	}
 	return NULL;
 }]])
 
