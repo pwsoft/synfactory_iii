@@ -28,6 +28,20 @@ define([DefWindow],[
 
 code8([block([Default window event handler (gdi)])[
 typedef void (*GuiCallback_t)(Context_ptr_t);
+static void sendEvent(HWND hwnd, GuiEvent_t event) {
+	Context_t myContext;
+	GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(hwnd, 0);
+
+	if (myCallback) {
+		myContext.currentEvent = event;
+		myContext.currentWindow = hwnd;
+		GetClientRect(hwnd, &(myContext.clientRect));
+
+		/* Call handler */
+		myCallback(&myContext);					
+	}
+}
+
 static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	Context_t myContext;
 
@@ -68,6 +82,33 @@ static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 			EndPaint(hwnd, &ps);
 
 		} break;
+	case WM_LBUTTONDOWN:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_L_DOWN);
+		break;
+	case WM_LBUTTONUP:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_L_UP);
+		break;
+	case WM_LBUTTONDBLCLK:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_L_DCLK);
+		break;
+	case WM_MBUTTONDOWN:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_M_DOWN);
+		break;
+	case WM_MBUTTONUP:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_M_UP);
+		break;
+	case WM_MBUTTONDBLCLK:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_M_DCLK);
+		break;
+	case WM_RBUTTONDOWN:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_R_DOWN);
+		break;
+	case WM_RBUTTONUP:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_R_UP);
+		break;
+	case WM_RBUTTONDBLCLK:
+		sendEvent(hwnd, GUI_EVENT_MOUSE_R_DCLK);
+		break;
 	case WM_CLOSE:
 		if (hwnd == theMainWindow) {
 			PostQuitMessage(0);
