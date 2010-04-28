@@ -47,20 +47,23 @@ block([[
 * Generated from the following modules:
 *]__modules])
 
-block([System includes])dnl
+block([[System includes]])dnl
 __sysincludes[]dnl
 
-block([Defines])dnl
+block([[Defines]])dnl
 __defs[]dnl
 
-block([Enums])dnl
+block([[Enums]])dnl
 __enums[]dnl
 
-block([Type defs])dnl
+block([[Typedefs]])dnl
 __typedefs[]dnl
 
-block([Structs])dnl
+block([[Structs]])dnl
 __structs[]dnl
+
+block([[Callback definitions]])dnl
+__callbacks[]dnl
 
 block([Constants])dnl
 __consts[]dnl

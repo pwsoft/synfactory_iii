@@ -3,10 +3,11 @@ changequote(`[', `]')
 # Initialise empty lists. Prevents syntax errors during compilation when certain macros are never filled.
 #
 define([__defs],)
-define([__typedefs],)
-define([__consts],)
 define([__enums],)
+define([__typedefs],)
 define([__structs],)
+define([__callbacks],)
+define([__consts],)
 define([__code1],)
 define([__code2],)
 define([__code3],)
@@ -84,6 +85,7 @@ define([Enum],
 define([Struct], [ifdef([__struct_$1],,[CreateStruct([$1])])][MacroBack]([[__struct_$1_values]],[[[$2]]]))
 define([Def], [MacroBack]([[__defs]],[[[$1]]]))
 define([Typedef], [MacroBack]([[__typedefs]],[[[$1]]]))
+define([DefCallback], [MacroBack]([[__callbacks]],[[[$1]]]))
 define([Const], [MacroBack]([[__consts]],[[[$1]]]))
 define([Var], [MacroBack]([[__vars]],[[[$1]]]))
 

@@ -4,6 +4,7 @@ Struct([Context], [HWND currentWindow;])
 Struct([Context], [HDC currentHdc;])
 Struct([Context], [RECT clientRect;])
 Typedef([typedef int color_t;])
+DefCallback([typedef void (*GuiCallback_t)(Context_ptr_t);])
 
 Const([static const char * const mainWindowClass="StudioFactoryMainClass";])
 Var([static HINSTANCE theInstance;])
@@ -27,7 +28,6 @@ define([DefWindow],[
 
 
 code8([block([Default window event handler (gdi)])[
-typedef void (*GuiCallback_t)(Context_ptr_t);
 static void sendEvent(HWND hwnd, GuiEvent_t event) {
 	Context_t myContext;
 	GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(hwnd, 0);
