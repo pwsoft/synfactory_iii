@@ -54,8 +54,8 @@ define([CreateEnum],[
 [} $1_t;]])
 	code1([block([Convert an enum $1_t value to a string.])
 [static const char *convert$1ToString($1_t aValue) {
-	switch(aValue) {]indent(2,__enum_$1_convert)
-		default: break;
+	switch(aValue) {]indent(1,__enum_$1_convert)
+	default: break;
 	}
 	return "???";
 }])
@@ -74,6 +74,7 @@ define([block],
 * $1
 \*********************************************************************/])
 define([sysinclude], [ifdef([__sysincludes_$1],,[define([__sysincludes_$1],)MacroBack([__sysincludes],[[#include <$1>]])])])
+define([locinclude], [ifdef([__sysincludes_$1],,[define([__sysincludes_$1],)MacroBack([__sysincludes],[[#include "$1"]])])])
 define([Init], [MacroBack]([[__init]],[[[$1]]]))
 define([Term], [MacroFront]([[__term]],[[[$1]]]))
 define([Enum],

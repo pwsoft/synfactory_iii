@@ -1,5 +1,7 @@
 module([GUI (gdi)])
 
+locinclude([resource.h])
+
 Struct([Context], [HWND currentWindow;])
 Struct([Context], [HDC currentHdc;])
 Struct([Context], [RECT clientRect;])
@@ -26,37 +28,63 @@ define([DefWindow],[
 }])
 ])
 
+code5([block([GUI primitives (gdi)])[
+static inline void guiSetFocus(HWND aWindow) {
+	(void)SetFocus(aWindow);
+}
 
-code8([block([Default window event handler (gdi)])[
-static void sendEvent(HWND hwnd, GuiEvent_t event) {
-	Context_t myContext;
-	GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(hwnd, 0);
-
-	if (myCallback) {
-		myContext.currentEvent = event;
-		myContext.currentWindow = hwnd;
-		GetClientRect(hwnd, &(myContext.clientRect));
-
-		/* Call handler */
-		myCallback(&myContext);					
+static inline void guiHideWindow(HWND aWindow) {
+	(void)ShowWindow(aWindow, SW_HIDE);
+	if (aWindow != theMainWindow) {
+		(void)SetFocus(theMainWindow);
 	}
 }
 
-static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+static inline void guiShowWindow(HWND aWindow) {
+	(void)ShowWindow(aWindow, SW_SHOW);
+	(void)SetFocus(aWindow);
+}
+
+static void guiSetWindowTitle(HWND aWindow, const char *aTitle) {
+	SetWindowText(aWindow, aTitle);
+}
+
+static inline bool guiIsWindowVisible(HWND aWindow) {
+	return (IsWindowVisible(aWindow) == TRUE);
+}
+
+]])
+
+code8([block([Default window event handler (gdi)])[
+static void sendEvent(Context_t *aContext, HWND aWindow, GuiEvent_t event) {
+	GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(aWindow, 0);
+
+	if (myCallback) {
+		aContext->currentEvent = event;
+		aContext->currentWindow = aWindow;
+		GetClientRect(aWindow, &(aContext->clientRect));
+
+		/* Call handler */
+		myCallback(aContext);					
+	}
+}
+
+static LRESULT CALLBACK stdWindowProc(HWND aWindow, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	Context_t myContext;
 
+	memset(&myContext, 0, sizeof(myContext));
 	switch(uMsg) {
 	case WM_COMMAND: {
 			if (HIWORD(wParam) == 0) {
 				myContext.currentEvent = GUI_EVENT_MENU;
-				myContext.currentWindow = hwnd;
+				myContext.currentWindow = aWindow;
 				myContext.currentMenu = (Menu_t)LOWORD(wParam);
 // TODO:				myContext.currentHdc = hdc;
-				GetClientRect(hwnd, &(myContext.clientRect));
+				GetClientRect(aWindow, &(myContext.clientRect));
 
 				logprintf("Menu item %d %s\n", LOWORD(wParam), convertMenuToString(myContext.currentMenu));
 
-				GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(hwnd, 0);
+				GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(aWindow, 0);
 				if (myCallback) {
 					myCallback(&myContext);					
 				}
@@ -64,14 +92,14 @@ static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 		} break;
 	case WM_PAINT: {
 			PAINTSTRUCT ps;
-			HDC hdc=BeginPaint(hwnd, &ps);
+			HDC hdc=BeginPaint(aWindow, &ps);
 
 			myContext.currentEvent = GUI_EVENT_REFRESH;
-			myContext.currentWindow = hwnd;
+			myContext.currentWindow = aWindow;
 			myContext.currentHdc = hdc;
-			GetClientRect(hwnd, &(myContext.clientRect));
+			GetClientRect(aWindow, &(myContext.clientRect));
 
-			GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(hwnd, 0);
+			GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(aWindow, 0);
 			if (myCallback) {
 				myCallback(&myContext);
 			} else {
@@ -79,45 +107,45 @@ static LRESULT CALLBACK stdWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 				Rectangle(hdc, myContext.clientRect.left, myContext.clientRect.top, myContext.clientRect.right, myContext.clientRect.bottom);
 			}
 
-			EndPaint(hwnd, &ps);
+			EndPaint(aWindow, &ps);
 
 		} break;
 	case WM_LBUTTONDOWN:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_L_DOWN);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_DOWN);
 		break;
 	case WM_LBUTTONUP:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_L_UP);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_UP);
 		break;
 	case WM_LBUTTONDBLCLK:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_L_DCLK);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_DCLK);
 		break;
 	case WM_MBUTTONDOWN:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_M_DOWN);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_DOWN);
 		break;
 	case WM_MBUTTONUP:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_M_UP);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_UP);
 		break;
 	case WM_MBUTTONDBLCLK:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_M_DCLK);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_DCLK);
 		break;
 	case WM_RBUTTONDOWN:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_R_DOWN);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_DOWN);
 		break;
 	case WM_RBUTTONUP:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_R_UP);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_UP);
 		break;
 	case WM_RBUTTONDBLCLK:
-		sendEvent(hwnd, GUI_EVENT_MOUSE_R_DCLK);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_DCLK);
 		break;
 	case WM_CLOSE:
-		if (hwnd == theMainWindow) {
-			PostQuitMessage(0);
+		if (aWindow == theMainWindow) {
+			theQuitFlag = true;
 		} else {
-			ShowWindow(hwnd, SW_HIDE);
+			guiHideWindow(aWindow);
 		}
 		break;
 	default:
-		return DefWindowProc(hwnd, uMsg, wParam, lParam);
+		return DefWindowProc(aWindow, uMsg, wParam, lParam);
 	}
 	
 	return 0;
@@ -132,9 +160,9 @@ static void createWindowClass(void) {
 	myClass.cbClsExtra=0;
 	myClass.cbWndExtra=4;
 	myClass.hInstance=theInstance;
-	myClass.hIcon=NULL; //LoadIcon(theInstance, MAKEINTRESOURCE(IDI_MAINICON));
+	myClass.hIcon=LoadIcon(theInstance, MAKEINTRESOURCE(IDI_MAINICON));
 	myClass.hCursor=LoadCursor(NULL, IDC_ARROW);
-	myClass.hbrBackground=NULL; // (HBRUSH)GetStockObject(GRAY_BRUSH);
+	myClass.hbrBackground=NULL;
 	myClass.lpszMenuName=NULL;
 	myClass.lpszClassName=mainWindowClass;
 	myClass.hIconSm=NULL;

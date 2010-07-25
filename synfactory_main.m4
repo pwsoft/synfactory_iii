@@ -6,10 +6,13 @@ code7([block([Main window event handler])[
 static void mainWindowHandler(Context_ptr_t aContext) {
 	switch (aContext->currentEvent) {
 	case GUI_EVENT_MENU:
-		logprintf("mainWindowHandler: GUI_EVENT_MENU %d", aContext->currentMenu);
+		logprintf("mainWindowHandler: GUI_EVENT_MENU %d\n", aContext->currentMenu);
 		switch(aContext->currentMenu) {
+		case MENU_EXIT:
+			theQuitFlag = true;
+			break;
 		case MENU_PROJECT_BROWSER:
-			ShowWindow(theProjectsWindow, SW_SHOW);
+			guiShowWindow(theProjectsWindow);
 			break;
 		default:
 			break;

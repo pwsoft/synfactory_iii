@@ -10,6 +10,8 @@ void audioOutputScopeHandler(Context_ptr_t aContext) {
 		break;
 	case GUI_EVENT_REFRESH:
 		logprintf("audioOutputScopeHandler refresh\n");
+		SelectObject(aContext->currentHdc, GetStockObject(WHITE_BRUSH));
+		Rectangle(aContext->currentHdc, aContext->clientRect.left, aContext->clientRect.top, aContext->clientRect.right, aContext->clientRect.bottom);		
 		break;
 	default:
 		break;

@@ -25,9 +25,15 @@ Enum([Menu], [MENU_AUDIO_MIXER])
 Enum([Menu], [MENU_VIDEO_PREVIEW])
 Enum([Menu], [MENU_MESSAGES])
 
+Enum([Menu], [MENU_REWIND])
+Enum([Menu], [MENU_STOP])
+Enum([Menu], [MENU_PLAY])
+Enum([Menu], [MENU_RECORD])
+
 Enum([Menu], [MENU_PREFERENCES])
 Enum([Menu], [MENU_SAVE_SETTINGS_AS])
 
+Enum([Menu], [MENU_ABOUT])
 
 
 
@@ -71,11 +77,18 @@ DefMenu([generateMainMenu],[
 		DefMenuItem([&Console and message window\tF11], [MENU_MESSAGES])
 	])
 	DefSubMenu([&Play mode],[
+		DefMenuItem([Re&wind], [MENU_REWIND])
+		DefMenuItem([&Stop], [MENU_STOP])
+		DefMenuItem([Pla&y], [MENU_PLAY])
+		DefMenuSeparator()
+		DefMenuItem([&Record], [MENU_RECORD])
+		DefMenuSeparator()
 	])
 	DefSubMenu([&Settings],[
 		DefMenuItem([&Preferences], [MENU_PREFERENCES])
 		DefMenuItem([&Save settings as], [MENU_SAVE_SETTINGS_AS])
 	])
 	DefSubMenu([&Help],[
+		DefMenuItem([&About SynFactory], [MENU_ABOUT])
 	])
 ])

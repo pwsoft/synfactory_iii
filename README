@@ -43,6 +43,8 @@ code2
 	- Log file
 code3
 	- DSP Objects
+code5
+	- GUI primitives, fonts and rendering
 code6
 	- Menus
 code7

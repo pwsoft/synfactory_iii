@@ -1,6 +1,7 @@
 module([menu (gdi)])
 
-define([DefMenu],[code6([static HMENU $1(void) {
+define([DefMenu],[code6([block([Menu])][
+static HMENU $1(void) {
 	HMENU menu = CreateMenu();
 indent(1,$2)
 	return menu;
