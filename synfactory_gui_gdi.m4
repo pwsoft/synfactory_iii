@@ -1,6 +1,7 @@
 module([GUI (gdi)])
 
 locinclude([resource.h])
+Def([#define COLOR_BLACK 0x00000000])
 
 Struct([Context], [HWND currentWindow;])
 Struct([Context], [HDC currentHdc;])
@@ -8,14 +9,18 @@ Struct([Context], [RECT clientRect;])
 Typedef([typedef int color_t;])
 DefCallback([typedef void (*GuiCallback_t)(Context_ptr_t);])
 
-Const([static const char * const mainWindowClass="StudioFactoryMainClass";])
-Var([static HINSTANCE theInstance;])
-Var([static ATOM mainClassAtom;])
+DefConst([static const char * const mainWindowClass="StudioFactoryMainClass";])
+DefVar([static HINSTANCE theInstance;])
+DefVar([static ATOM mainClassAtom;])
+
+DefVar([static HPEN theCurrentPen=NULL;]);
+DefVar([static HBRUSH theCurrentBrush=NULL;]);
+
 
 # 1=name, 2=title, 3=handler, 4=xsize, 5=ysize, 6=main window flag
 define([DefWindow],[
-	Var([static HWND $1;])
-	Var([static bool $1Refresh;])
+	DefVar([static HWND $1;])
+	DefVar([static bool $1Refresh;])
 	Init(ifelse([$6],,
 		[$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);],
 		[$1 = CreateWindowEx(0, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);]))
@@ -28,7 +33,41 @@ define([DefWindow],[
 }])
 ])
 
-code5([block([GUI primitives (gdi)])[
+code5([block([GUI draw functions (gdi)])[
+static void guiSelectPenColor(Context_ptr_t aContext, color_t color, int width) {
+	HPEN newPen=NULL;
+	if (color>=0 && color<0x1000000) {
+		newPen=CreatePen(PS_SOLID, width, 0x02000000 | color);
+		SelectObject(aContext->currentHdc, newPen);
+		SetTextColor(aContext->currentHdc, 0x02000000 | color);
+	} else {
+		SelectObject(aContext->currentHdc, GetStockObject(NULL_PEN));
+	}
+	if (theCurrentPen) DeleteObject(theCurrentPen);
+	theCurrentPen=newPen;
+}
+
+static void guiSelectFillColor(Context_ptr_t aContext, color_t color)
+{
+	HBRUSH newBrush=NULL;
+	if (color>=0 && color<0x1000000) {
+		newBrush=CreateSolidBrush(0x02000000 | color);
+		SelectObject(aContext->currentHdc, newBrush);
+		SetBkColor(aContext->currentHdc, 0x02000000 | color);
+	} else {
+		SelectObject(aContext->currentHdc, GetStockObject(NULL_BRUSH));
+	}
+	if (theCurrentBrush) DeleteObject(theCurrentBrush);
+	theCurrentBrush=newBrush;
+}
+
+static void guiDrawLine(Context_ptr_t aContext, int aStartX, int aStartY, int aEndX, int aEndY) {
+	(void)MoveToEx(aContext->currentHdc, aStartX, aStartY, NULL);
+	(void)LineTo(aContext->currentHdc, aEndX, aEndY);
+}
+]])
+
+code5([block([GUI window functions (gdi)])[
 static inline void guiSetFocus(HWND aWindow) {
 	(void)SetFocus(aWindow);
 }
@@ -54,6 +93,7 @@ static inline bool guiIsWindowVisible(HWND aWindow) {
 }
 
 ]])
+
 
 code8([block([Default window event handler (gdi)])[
 static void sendEvent(Context_t *aContext, HWND aWindow, GuiEvent_t event) {
@@ -90,6 +130,10 @@ static LRESULT CALLBACK stdWindowProc(HWND aWindow, UINT uMsg, WPARAM wParam, LP
 				}
 			}
 		} break;
+	case WM_SIZE: {
+			InvalidateRect(aWindow, NULL, FALSE);
+		} break;
+
 	case WM_PAINT: {
 			PAINTSTRUCT ps;
 			HDC hdc=BeginPaint(aWindow, &ps);

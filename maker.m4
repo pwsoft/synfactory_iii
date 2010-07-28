@@ -87,8 +87,8 @@ define([Struct], [ifdef([__struct_$1],,[CreateStruct([$1])])][MacroBack]([[__str
 define([Def], [MacroBack]([[__defs]],[[[$1]]]))
 define([Typedef], [MacroBack]([[__typedefs]],[[[$1]]]))
 define([DefCallback], [MacroBack]([[__callbacks]],[[[$1]]]))
-define([Const], [MacroBack]([[__consts]],[[[$1]]]))
-define([Var], [MacroBack]([[__vars]],[[[$1]]]))
+define([DefConst], [MacroBack]([[__consts]],[[[$1]]]))
+define([DefVar], [MacroBack]([[__vars]],[[[$1]]]))
 
 #
 # Code block macros. Depending on required order take one of the blocks.

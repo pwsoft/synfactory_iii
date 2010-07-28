@@ -1,6 +1,6 @@
 module([main (win32)])
 
-Var([static bool theQuitFlag = false;])
+DefVar([static bool theQuitFlag = false;])
 
 #
 # The eventloop

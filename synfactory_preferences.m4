@@ -3,7 +3,7 @@ module([preferences])
 DefWindow([thePreferencesWindow], ["Preferences"], [preferencesWindowHandler], 400, 400)
 
 define([PrefColorSelector],[
-	Var([static color_t $2;])
+	DefVar([static color_t $2;])
 	MacroBack([__preferences_refresh], [[/* Color selector "$1" */]])
 ])
 
