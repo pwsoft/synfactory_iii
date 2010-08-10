@@ -5,17 +5,43 @@ DefWindow([thePreferencesWindow], ["Preferences"], [preferencesWindowHandler], 4
 define([__preferences_refresh],)
 define([PrefColorSelector],[
 	DefVar([static color_t $2;])
-	MacroBack([__preferences_refresh], [[/* Color selector "$1" */]])
+	MacroBack([__preferences_refresh], [[configDrawColorBar(aContext, x, y, $2);]])
 ])
 
 code7([block([Preference window event handler])[
+static int colorNotMask[3]={0xFFFF00,0xFF00FF,0x00FFFF};
+static int colorMask[3]={0x0000FF,0x00FF00,0xFF0000};
+static int colorSelector[3][16]={
+	{0x000000,0x000011,0x000022,0x000033,0x000044,0x000055,0x000066,0x000077,0x000088,0x000099,0x0000AA,0x0000BB,0x0000CC,0x0000DD,0x0000EE,0x0000FF},
+	{0x000000,0x001100,0x002200,0x003300,0x004400,0x005500,0x006600,0x007700,0x008800,0x009900,0x00AA00,0x00BB00,0x00CC00,0x00DD00,0x00EE00,0x00FF00},
+	{0x000000,0x110000,0x220000,0x330000,0x440000,0x550000,0x660000,0x770000,0x880000,0x990000,0xAA0000,0xBB0000,0xCC0000,0xDD0000,0xEE0000,0xFF0000}};
+static void configDrawColorBar(Context_ptr_t aContext, int x, int &y, int current) {
+	int i,j;
+
+	guiSelectPenColor(aContext, -1, 0);
+	for(i=0;i<3;i++) {
+		for(j=0;j<sizeof(colorSelector[0])/sizeof(colorSelector[0][0]);j++) {
+			guiSelectFillColor(aContext, (current&colorNotMask[i])+colorSelector[i][j]);
+			guiDrawRect(aContext, x+30+j*14, y+20*i, x+30+j*14+10, y+20*i+12);
+			if ((current&colorMask[i])==colorSelector[i][j])
+			{
+				guiSelectFillColor(aContext, 0);
+				guiDrawRect(aContext, x+30+j*14, y+20*i+13, x+30+j*14+10, y+20*i+15);
+			}
+//			guiAddArea(aContext, x+30+j*14, y+20*i, x+30+j*14+10, y+20+20*i);
+		}
+	}
+	y += 60;
+}
+
 static void preferencesWindowHandler(Context_ptr_t aContext) {
 	switch(aContext->currentEvent) {
 	case GUI_EVENT_REFRESH: {
 		int x = 0;
 		int y = 0;
-		SelectObject(aContext->currentHdc, GetStockObject(WHITE_BRUSH));
-		Rectangle(aContext->currentHdc, aContext->clientRect.left, aContext->clientRect.top, aContext->clientRect.right, aContext->clientRect.bottom);]
+		guiSelectPenColor(aContext, -1, 0);
+		guiSelectFillColor(aContext, COLOR_WHITE);
+		guiDrawRect(aContext, aContext->clientRect.left, aContext->clientRect.top, aContext->clientRect.right, aContext->clientRect.bottom);]
 indent(2,__preferences_refresh)[
 		} break;
 	default:

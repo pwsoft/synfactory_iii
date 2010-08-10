@@ -4,7 +4,8 @@ DefConst([static const int OUTPUT_SCOPE_BUFFER_SIZE=1024;])
 DefVar([static int theAudioOutputScopeMode=0;])
 
 DefWindow([theAudioOutputScope], "Audio Output Scope", [audioOutputScopeHandler], 400, 400)
-PrefColorSelector([Audio Output Scope Color], [theAudioOutputScopeColor])
+PrefColorSelector([Audio Output Scope Background Color], [theAudioOutputScopeBgColor])
+PrefColorSelector([Audio Output Scope Line Color], [theAudioOutputScopeLineColor])
 
 code7([block([Audio Output Scope event handler])[
 void audioOutputScopeHandler(Context_ptr_t aContext) {

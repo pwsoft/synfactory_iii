@@ -2,6 +2,7 @@ module([GUI (gdi)])
 
 locinclude([resource.h])
 Def([#define COLOR_BLACK 0x00000000])
+Def([#define COLOR_WHITE 0x00FFFFFF])
 
 Struct([Context], [HWND currentWindow;])
 Struct([Context], [HDC currentHdc;])
