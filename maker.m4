@@ -2,6 +2,8 @@ changequote(`[', `]')
 #
 # Initialise empty lists. Prevents syntax errors during compilation when certain macros are never filled.
 #
+define([__sysincludes],)
+define([__locincludes],)
 define([__defs],)
 define([__enums],)
 define([__typedefs],)
@@ -40,7 +42,7 @@ define([indent],[patsubst([[$2]],[^],substr([										],0,$1))])
 #
 define([MacroFront], [define([$1],[]
 [$2]defn([$1]))])
-define([MacroBack], [define([$1],defn([$1])
+define([MacroBack], [define([$1],ifdef([$1],[defn([$1])])
 [$2])])
 define([MacroBackCont], [define([$1],defn([$1])[$2])])
 
@@ -74,43 +76,43 @@ define([block],
 * $1
 \*********************************************************************/])
 define([sysinclude], [ifdef([__sysincludes_$1],,[define([__sysincludes_$1],)MacroBack([__sysincludes],[[#include <$1>]])])])
-define([locinclude], [ifdef([__sysincludes_$1],,[define([__sysincludes_$1],)MacroBack([__sysincludes],[[#include "$1"]])])])
-define([Init], [MacroBack]([[__init]],[[[$1]]]))
-define([Term], [MacroFront]([[__term]],[[[$1]]]))
+define([locinclude], [ifdef([__locincludes_$1],,[define([__sysincludes_$1],)MacroBack([__sysincludes],[[#include "$1"]])])])
+define([Init], [MacroBack([__init],[[$1]])])
+define([Term], [MacroFront([__term],[[$1]])])
 define([Enum],
 	[ifdef([__enum_$1],
 		[MacroBackCont]([[__enum_$1_values]],[[[,]]]),
 		[CreateEnum([$1])])]
 	[MacroBack]([[__enum_$1_values]],[[[$2]]])
 	[MacroBack]([[__enum_$1_convert]],[[[case $2: return "$2";]]]))
-define([Struct], [ifdef([__struct_$1],,[CreateStruct([$1])])][MacroBack]([[__struct_$1_values]],[[[$2]]]))
-define([Def], [MacroBack]([[__defs]],[[[$1]]]))
-define([Typedef], [MacroBack]([[__typedefs]],[[[$1]]]))
-define([DefCallback], [MacroBack]([[__callbacks]],[[[$1]]]))
-define([DefConst], [MacroBack]([[__consts]],[[[$1]]]))
-define([DefVar], [MacroBack]([[__vars]],[[[$1]]]))
+define([Struct], [ifdef([__struct_$1],,[CreateStruct([$1])])MacroBack([__struct_$1_values],[[$2]])])
+define([Def], [MacroBack([__defs],[[$1]])])
+define([Typedef], [MacroBack([__typedefs],[[$1]])])
+define([DefCallback], [MacroBack([__callbacks],[[$1]])])
+define([DefConst], [MacroBack([__consts],[[$1]])])
+define([DefVar], [MacroBack([__vars],[[$1]])])
 
 #
 # Code block macros. Depending on required order take one of the blocks.
 # Library and support routines must use low numbers, toplevel functions use higher number.
-# This ordering required less forward declarations for the functions.
+# This ordering requires less forward declarations for the functions.
 #
-define([code1], [MacroBack]([[__code1]],
-[[$1]]))
-define([code2], [MacroBack]([[__code2]],
-[[$1]]))
-define([code3], [MacroBack]([[__code3]],
-[[$1]]))
-define([code4], [MacroBack]([[__code4]],
-[[$1]]))
-define([code5], [MacroBack]([[__code5]],
-[[$1]]))
-define([code6], [MacroBack]([[__code6]],
-[[$1]]))
-define([code7], [MacroBack]([[__code7]],
-[[$1]]))
-define([code8], [MacroBack]([[__code8]],
-[[$1]]))
-define([code9], [MacroBack]([[__code9]],
-[[$1]]))
+define([code1], [MacroBack([__code1],
+[$1])])
+define([code2], [MacroBack([__code2],
+[$1])])
+define([code3], [MacroBack([__code3],
+[$1])])
+define([code4], [MacroBack([__code4],
+[$1])])
+define([code5], [MacroBack([__code5],
+[$1])])
+define([code6], [MacroBack([__code6],
+[$1])])
+define([code7], [MacroBack([__code7],
+[$1])])
+define([code8], [MacroBack([__code8],
+[$1])])
+define([code9], [MacroBack([__code9],
+[$1])])
 define([module],[MacroBack([__modules],*	[[$1]]substr([]                              ,len([$1]))"__file__")])

@@ -49,6 +49,7 @@ block([[
 
 block([[System includes]])dnl
 __sysincludes[]dnl
+__locincludes[]dnl
 
 block([[Defines]])dnl
 __defs[]dnl
