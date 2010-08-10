@@ -17,6 +17,7 @@ define(VERSION,[20100327])
 
 Const([static const char theProgramName[]="]PROGRAM - VERSION[";])
 platforminclude([synfactory_logfile])
+platforminclude([synfactory_language])
 platforminclude([synfactory_threads])
 platforminclude([synfactory_arealist])
 platforminclude([synfactory_gui])

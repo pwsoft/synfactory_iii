@@ -25,8 +25,8 @@ static const int alignBottomRight=(DT_BOTTOM | DT_RIGHT);
 DefVar([static HINSTANCE theInstance;])
 DefVar([static ATOM mainClassAtom;])
 
-DefVar([static HPEN theCurrentPen=NULL;])
-DefVar([static HBRUSH theCurrentBrush=NULL;])
+DefVar([static HPEN theCurrentPen = NULL;])
+DefVar([static HBRUSH theCurrentBrush = NULL;])
 DefVar([static int currentAlignment = DT_TOP | DT_LEFT;])
 
 
@@ -104,11 +104,11 @@ static void guiDrawEllipse(Context_ptr_t aContext, int left, int top, int right,
 //}
 
 static void guiDrawOpaque(Context_ptr_t aContext) {
-	SetBkMode(aContext->currentHdc, OPAQUE);
+	(void)SetBkMode(aContext->currentHdc, OPAQUE);
 }
 
 static void guiDrawTransparent(Context_ptr_t aContext) {
-	SetBkMode(aContext->currentHdc, TRANSPARENT);
+	(void)SetBkMode(aContext->currentHdc, TRANSPARENT);
 }
 
 static void guiDrawText(Context_ptr_t aContext, int left, int top, int right, int bottom, const char *text, size_t count=-1) {

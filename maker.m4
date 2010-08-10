@@ -55,8 +55,8 @@ define([CreateEnum],[
 	define([__enum_$1],[[typedef enum _$1 {]indent(1,__enum_$1_values)
 [} $1_t;]])
 	code1([block([Convert an enum $1_t value to a string.])
-[static const char *convert$1ToString($1_t aValue) {
-	switch(aValue) {]indent(1,__enum_$1_convert)
+[static const char *convert$1ToString($1_t aEnumValue) {
+	switch(aEnumValue) {]indent(1,__enum_$1_convert)
 	default: break;
 	}
 	return "???";
