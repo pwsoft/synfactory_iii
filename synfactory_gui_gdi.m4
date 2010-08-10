@@ -10,11 +10,23 @@ Typedef([typedef int color_t;])
 DefCallback([typedef void (*GuiCallback_t)(Context_ptr_t);])
 
 DefConst([static const char * const mainWindowClass="StudioFactoryMainClass";])
+DefConst([
+static const int alignTopLeft=(DT_TOP | DT_LEFT);
+static const int alignTopCenter=(DT_TOP | DT_CENTER);
+static const int alignTopRight=(DT_TOP | DT_RIGHT);
+static const int alignLineLeft=(DT_VCENTER | DT_LEFT);
+static const int alignLineCenter=(DT_VCENTER | DT_CENTER);
+static const int alignLineRight=(DT_VCENTER | DT_RIGHT);
+static const int alignBottomLeft=(DT_BOTTOM | DT_LEFT);
+static const int alignBottomCenter=(DT_BOTTOM | DT_CENTER);
+static const int alignBottomRight=(DT_BOTTOM | DT_RIGHT);
+])
 DefVar([static HINSTANCE theInstance;])
 DefVar([static ATOM mainClassAtom;])
 
-DefVar([static HPEN theCurrentPen=NULL;]);
-DefVar([static HBRUSH theCurrentBrush=NULL;]);
+DefVar([static HPEN theCurrentPen=NULL;])
+DefVar([static HBRUSH theCurrentBrush=NULL;])
+DefVar([static int currentAlignment = DT_TOP | DT_LEFT;])
 
 
 # 1=name, 2=title, 3=handler, 4=xsize, 5=ysize, 6=main window flag
@@ -64,6 +76,70 @@ static void guiSelectFillColor(Context_ptr_t aContext, color_t color)
 static void guiDrawLine(Context_ptr_t aContext, int aStartX, int aStartY, int aEndX, int aEndY) {
 	(void)MoveToEx(aContext->currentHdc, aStartX, aStartY, NULL);
 	(void)LineTo(aContext->currentHdc, aEndX, aEndY);
+}
+
+static void guiDrawLineFrom(Context_ptr_t aContext, int aX, int aY) {
+	(void)MoveToEx(aContext->currentHdc, aX, aY, NULL);
+}
+
+static void guiDrawLineTo(Context_ptr_t aContext, int aX, int aY) {
+	(void)LineTo(aContext->currentHdc, aX, aY);
+}
+
+static void guiDrawRect(Context_ptr_t aContext, int left, int top, int right, int bottom) {
+	(void)Rectangle(aContext->currentHdc, left, top, right+((theCurrentPen)?0:1), bottom+((theCurrentPen)?0:1));
+}
+
+static void guiDrawRoundRect(Context_ptr_t aContext, int left, int top, int right, int bottom, int width, int height) {
+	(void)RoundRect(aContext->currentHdc, left, top, right, bottom, width, height);
+}
+
+static void guiDrawEllipse(Context_ptr_t aContext, int left, int top, int right, int bottom) {
+	(void)Ellipse(aContext->currentHdc, left, top, right+((theCurrentPen)?0:1), bottom+((theCurrentPen)?0:1));
+}
+
+//static void guiPolygon(Context_ptr_t aContext, GuiPointPtr aPointList, int aCount) {
+//	(void)Polygon(aContext->currentHdc, aPointList, aCount);
+//}
+
+static void guiDrawOpaque(Context_ptr_t aContext) {
+	SetBkMode(aContext->currentHdc, OPAQUE);
+}
+
+static void guiDrawTransparent(Context_ptr_t aContext) {
+	SetBkMode(aContext->currentHdc, TRANSPARENT);
+}
+
+static void guiDrawText(Context_ptr_t aContext, int left, int top, int right, int bottom, const char *text, size_t count=-1) {
+	RECT myRect={left, top, right, bottom};
+	DrawText(aContext->currentHdc, text, (int)count, &myRect, currentAlignment | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP);
+}
+
+static void guiDrawText(Context_ptr_t aContext, int left, int top, const char *text, size_t count=-1) {
+	RECT myRect={left, top, left, top};
+	DrawText(aContext->currentHdc, text, (int)count, &myRect, currentAlignment | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP);
+}
+
+static void guiCalcTextSize(Context_ptr_t aContext, int *xSize, int *ySize, const char *text, int count) {
+	SIZE mySize;
+	GetTextExtentPoint32(aContext->currentHdc, text, count, &mySize);
+	if (xSize) *xSize = mySize.cx;
+	if (ySize) *ySize = mySize.cy;
+}
+
+static void guiDraw3dFill(Context_ptr_t aContext, int left, int top, int right, int bottom) {
+	RECT myRect={left, top, right, bottom};
+	DrawEdge(aContext->currentHdc, &myRect, EDGE_SUNKEN, BF_MIDDLE);
+}
+
+void guiDraw3dRect(Context_ptr_t aContext, int left, int top, int right, int bottom, bool pressed) {
+	RECT myRect={left, top, right, bottom};
+	if (theCurrentBrush) {
+		(void)FillRect(aContext->currentHdc, &myRect, theCurrentBrush);
+		DrawEdge(aContext->currentHdc, &myRect, (pressed)?EDGE_SUNKEN:EDGE_RAISED, BF_RECT);
+	} else {
+		DrawEdge(aContext->currentHdc, &myRect, (pressed)?EDGE_SUNKEN:EDGE_RAISED, BF_RECT | BF_MIDDLE);
+	}
 }
 ]])
 
