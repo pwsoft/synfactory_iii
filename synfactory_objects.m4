@@ -1,12 +1,14 @@
+module([objects])
+
 #
 # Object macros
 #
 define([defobj],[
 	Enum([Object],[OBJECT_$1])
-	Enum([Menu], [MENU_OBJECT_$1])
-	MacroBack([__ObjectTitles],[	case OBJECT_$1: return "[$2]";])
-	ifelse([$3],,,[MacroBack([__ObjectKeys],[[	case '$3': return OBJECT_$1;]])])
-	ifelse([$7],NULL,,[MacroBack([__ObjectMenus],[[	case OBJECT_$1: return $7;]])])
+	Enum([Menu],[MENU_OBJECT_$1])
+	MacroBack([__ObjectTitles],[case OBJECT_$1: return "[$2]";])
+	ifelse([$3],,,[MacroBack([__ObjectKeys],[[case '$3': return OBJECT_$1;]])])
+	ifelse([$7],NULL,,[MacroBack([__ObjectMenus],[[case OBJECT_$1: return $7;]])])
 ])
 
 #
@@ -14,9 +16,8 @@ define([defobj],[
 #
 code3([block([[Get the module title for given object type]])[
 static const char *objectToTitle(Object_t aObject) {
-	switch(aObject) {]]
-__ObjectTitles
-[[	default:
+	switch(aObject) {]indent(1,__ObjectTitles)[
+	default:
 		break;
 	}
 	return "???";
@@ -24,9 +25,8 @@ __ObjectTitles
 
 code3([block([[Convert a key pressed on the keyboard to object type]])[
 static Object_t keyToObject(int aKey) {
-	switch(aKey) {]]
-__ObjectKeys
-[[	default:
+	switch(aKey) {]indent(1,__ObjectKeys)[
+	default:
 		break;
 	}
 	return OBJECT_NONE;
@@ -34,9 +34,8 @@ __ObjectKeys
 
 code3([block([[Convert from object to menu name]])[
 static const char *objectToMenu(Object_t aObject) {
-	switch(aObject) {]]
-__ObjectMenus
-[[	default:
+	switch(aObject) {]indent(1,__ObjectMenus)[
+	default:
 		break;
 	}
 	return NULL;
