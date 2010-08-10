@@ -14,7 +14,7 @@ define([defobj],[
 #
 # Object support functions
 #
-code3([block([[Get the module title for given object type]])[
+code4([block([[Get the module title for given object type]])[
 static const char *objectToTitle(Object_t aObject) {
 	switch(aObject) {]indent(1,__ObjectTitles)[
 	default:
@@ -23,7 +23,7 @@ static const char *objectToTitle(Object_t aObject) {
 	return "???";
 }]])
 
-code3([block([[Convert a key pressed on the keyboard to object type]])[
+code4([block([[Convert a key pressed on the keyboard to object type]])[
 static Object_t keyToObject(int aKey) {
 	switch(aKey) {]indent(1,__ObjectKeys)[
 	default:
@@ -32,7 +32,7 @@ static Object_t keyToObject(int aKey) {
 	return OBJECT_NONE;
 }]])
 
-code3([block([[Convert from object to menu name]])[
+code4([block([[Convert from object to menu name]])[
 static const char *objectToMenu(Object_t aObject) {
 	switch(aObject) {]indent(1,__ObjectMenus)[
 	default:
