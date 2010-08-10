@@ -2,6 +2,8 @@ module([GUI])
 
 Struct([Context], [GuiEvent_t currentEvent;])
 Struct([Context], [Menu_t currentMenu;])
+Struct([Context], [int mouseX;])
+Struct([Context], [int mouseY;])
 
 Enum([GuiEvent], [GUI_EVENT_TIMER])
 Enum([GuiEvent], [GUI_EVENT_MENU])

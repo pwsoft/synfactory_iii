@@ -1,5 +1,6 @@
 module([GUI (gdi)])
 
+sysinclude([windowsx.h])
 locinclude([resource.h])
 Def([#define COLOR_BLACK 0x00000000])
 Def([#define COLOR_WHITE 0x00FFFFFF])
@@ -173,12 +174,14 @@ static inline bool guiIsWindowVisible(HWND aWindow) {
 
 
 code8([block([Default window event handler (gdi)])[
-static void sendEvent(Context_t *aContext, HWND aWindow, GuiEvent_t event) {
+static void sendEvent(Context_t *aContext, HWND aWindow, GuiEvent_t event, int mouseX, int mouseY) {
 	GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(aWindow, 0);
 
 	if (myCallback) {
 		aContext->currentEvent = event;
 		aContext->currentWindow = aWindow;
+		aContext->mouseX = mouseX;
+		aContext->mouseY = mouseY;
 		GetClientRect(aWindow, &(aContext->clientRect));
 
 		/* Call handler */
@@ -232,31 +235,31 @@ static LRESULT CALLBACK stdWindowProc(HWND aWindow, UINT uMsg, WPARAM wParam, LP
 
 		} break;
 	case WM_LBUTTONDOWN:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_DOWN);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_DOWN, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_LBUTTONUP:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_UP);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_UP, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_LBUTTONDBLCLK:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_DCLK);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_DCLK, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_MBUTTONDOWN:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_DOWN);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_DOWN, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_MBUTTONUP:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_UP);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_UP, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_MBUTTONDBLCLK:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_DCLK);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_M_DCLK, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_RBUTTONDOWN:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_DOWN);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_DOWN, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_RBUTTONUP:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_UP);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_UP, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_RBUTTONDBLCLK:
-		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_DCLK);
+		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_R_DCLK, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 		break;
 	case WM_CLOSE:
 		if (aWindow == theMainWindow) {
