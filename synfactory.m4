@@ -15,7 +15,7 @@ define(EXENAME,[synfactory_iii])
 define(PROGRAM,[SynFactory III])
 define(VERSION,[20100327])
 
-Const([static const char theProgramName[]="]PROGRAM - VERSION[";])
+DefConst([static const char theProgramName[]="]PROGRAM - VERSION[";])
 platforminclude([synfactory_logfile])
 platforminclude([synfactory_language])
 platforminclude([synfactory_threads])
