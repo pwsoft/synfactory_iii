@@ -37,6 +37,7 @@ code9([block([Main])
 indent(1,__init)
 [	SetMenu(theMainWindow, generateMainMenu());]
 [	eventloop();]
+[	syn_save("autoload.syn");]
 indent(1,__term)
 [	return 0;
 }]
