@@ -91,6 +91,7 @@ define([Typedef], [MacroBack([__typedefs],[[$1]])])
 define([DefCallback], [MacroBack([__callbacks],[[$1]])])
 define([DefConst], [MacroBack([__consts],[[$1]])])
 define([DefVar], [MacroBack([__vars],[[$1]])])
+define([DefSetVar], [MacroBack([__vars],[[static $1 $2 = $3;]])])
 
 #
 # Code block macros. Depending on required order take one of the blocks.

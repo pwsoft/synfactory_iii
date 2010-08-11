@@ -5,10 +5,12 @@ DefWindow([thePreferencesWindow], ["Preferences"], [preferencesWindowHandler], 4
 define([__preferences_refresh],)
 define([__preferences_click],)
 define([PrefColorSelector],[
-	DefVar([static color_t $2;])
-	MacroBack([__preferences_refresh], [[preferencesDrawHeader(aContext, x, y, $1);]])
+	EN([LANG_]StringToId($1), [$1])
+	DefSetVar([color_t], [$2], [$3])
+	MacroBack([__preferences_refresh], [[preferencesDrawHeader(aContext, x, y, LANG_]StringToId($1)[);]])
 	MacroBack([__preferences_refresh], [[preferencesDrawColorBar(aContext, x, y, $2);]])
 	MacroBack([__preferences_click], [[preferencesClickColorBar(aContext, x, y, $2);]])
+	SynSave("StringToId($1)[ %08X\n", $2]);
 ])
 
 code7([block([Preference window event handler])[
