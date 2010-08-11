@@ -1,6 +1,6 @@
 module([language])
 
-define([StringToId], [translit([[$1]],
+define([StringToLangId], [[LANG_]translit([[$1]],
 	[ abcdefghijklmnopqrstuvwxyz],
 	[_ABCDEFGHIJKLMNOPQRSTUVWXYZ])])
 

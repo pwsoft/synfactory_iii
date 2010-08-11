@@ -1,10 +1,10 @@
-module([SYN save])
+module([SYN load/save])
 
 define([__synsave_settings],)
-define([SynSave], [MacroBack([__synsave_settings], [[fprintf(synfile, $1);]])])
+define([SynFileHex], [MacroBack([__synsave_settings], [[fprintf(synfile, "$1 %08X\n", $2);]])])
 
 code7([[
-static bool syn_save(const char *aFilename) {
+static bool SynFileSave(const char *aFilename) {
 	FILE *synfile = fopen(aFilename, "wt");
 	bool result = true;
 	
