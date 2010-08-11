@@ -1,10 +1,12 @@
 
 M4=m4
-GCC=i686-mingw32-gcc
-WINDRES=i686-mingw32-windres
-STRIP=i686-mingw32-strip
+GCC=$(PREFIX)gcc
+WINDRES=$(PREFIX)windres
+STRIP=$(PREFIX)strip
 OUTPUT_NAME=synfactory_iii.exe
 CPPFLAGS=-O3 -Wall -Wextra -Wswitch-default -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wpadded -Winline -fomit-frame-pointer -fno-rtti -fno-exceptions
+
+all: $(OUTPUT_NAME)
 
 $(OUTPUT_NAME): *.m4 synfactory_res.o
 	$(M4) synfactory.m4 >synfactory_iii.cpp
