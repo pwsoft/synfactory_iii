@@ -1,4 +1,8 @@
+#
+# Change quote characters to something more sane.
+#
 changequote(`[', `]')
+
 #
 # Initialise empty lists. Prevents syntax errors during compilation when certain macros are never filled.
 #
@@ -42,7 +46,7 @@ define([indent],[patsubst([[$2]],[^],substr([										],0,$1))])
 #
 define([MacroFront], [define([$1],[]
 [$2]defn([$1]))])
-define([MacroBack], [define([$1],ifdef([$1],[defn([$1])])
+define([MacroBack], [define([$1],defn([$1])
 [$2])])
 define([MacroBackCont], [define([$1],defn([$1])[$2])])
 
@@ -91,7 +95,19 @@ define([Typedef], [MacroBack([__typedefs],[[$1]])])
 define([DefCallback], [MacroBack([__callbacks],[[$1]])])
 define([DefConst], [MacroBack([__consts],[[$1]])])
 define([DefVar], [MacroBack([__vars],[[$1]])])
-define([DefSetVar], [MacroBack([__vars],[[static $1 $2 = $3;]])])
+define([DefSetVar], [
+	define([__set_$2],)
+	MacroBack([__vars],[[static $1 $2 = $3;]])
+	code1([block([Set function for $2])[
+static void __set_$2($1 aNewValue) {
+	if (aNewValue != $2) {
+		$2 = aNewValue;
+]indent(2,__set_$2)[
+	}
+}
+]])])
+define([WatchVar], [MacroBack([__set_$1], [[$2]])])
+define([SetVar], [[__set_$1($2);]])
 
 #
 # Code block macros. Depending on required order take one of the blocks.

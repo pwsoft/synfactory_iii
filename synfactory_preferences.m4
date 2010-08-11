@@ -1,6 +1,7 @@
 module([preferences])
 
 DefWindow([thePreferencesWindow], ["Preferences"], [preferencesWindowHandler], 400, 400)
+DefCallback([typedef void (*SetColorCallback_t)(color_t);])
 
 define([__preferences_refresh],)
 define([__preferences_click],)
@@ -9,7 +10,7 @@ define([PrefColorSelector],[
 	DefSetVar([color_t], [$2], [$3])
 	MacroBack([__preferences_refresh], [[preferencesDrawHeader(aContext, x, y, LANG_]StringToId($1)[);]])
 	MacroBack([__preferences_refresh], [[preferencesDrawColorBar(aContext, x, y, $2);]])
-	MacroBack([__preferences_click], [[preferencesClickColorBar(aContext, x, y, $2);]])
+	MacroBack([__preferences_click], [[preferencesClickColorBar(aContext, x, y, $2, __set_$2);]])
 	SynSave("StringToId($1)[ %08X\n", $2]);
 ])
 
@@ -44,7 +45,7 @@ static void preferencesDrawColorBar(Context_ptr_t aContext, int x, int &y, color
 	y += 60;
 }
 
-static bool preferencesClickColorBar(Context_ptr_t aContext, int x, int &y, color_t &value) {
+static bool preferencesClickColorBar(Context_ptr_t aContext, int x, int &y, color_t &value, SetColorCallback_t setFunction) {
 	bool result = false;
 
 	/* Skip header text */
@@ -53,7 +54,7 @@ static bool preferencesClickColorBar(Context_ptr_t aContext, int x, int &y, colo
 	for(int color=0; color<3; color++) {
 		if (aContext->mouseX >= 30 && aContext->mouseX < 30+colorSelectorSteps*14
 		&& aContext->mouseY >= y && aContext->mouseY < y+20) {
-			value = (value & colorNotMask[color]) | colorSelector[color][(aContext->mouseX-30)/14];
+			setFunction((value & colorNotMask[color]) | colorSelector[color][(aContext->mouseX-30)/14]);
 			thePreferencesWindowRefresh = true;
 			result = true;
 		}

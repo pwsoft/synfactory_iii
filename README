@@ -17,6 +17,7 @@ better. This process generates a single cpp file that is compiled to optain
 the application. To be able to combine all the files correctly into an
 application, they must obey certain rules.
 
+
 Compilation
 -------------------
 
@@ -33,6 +34,7 @@ processed and collected into hidden macros that start with double underscore.
 __defs, __const, __enums, __structs, __code1 .. __code9
 
 The final file contents is a concatination of the contents of all these macros.
+
 
 Code blocks
 -------------------
@@ -55,4 +57,23 @@ code9
 	- Main
 
 
+Set-vars
+-------------------
+
+Set-vars are variables where code can register itself to follow updates.
+A Set-var is defined with the DefSetVar macro. It takes 3 arguments.
+- a type
+- a variable name
+- a default value
+For example DefSetVar([color_t], [theColor], [COLOR_BLACK]). Updates are
+done by using the SetVar macro. This inserts code that calls the function
+__set_<variablename>. To add code on the watch list call
+WatchVar(<varname>, <code>). This code is added to the __set_X function.
+Boolean flags that signal change are a good choice.
+Keep in mind the performance inpact of too many watchers when using SetVars.
+
+In the code they are used for refreshing windows when related preference
+parameters change. You can safely add Watches for none existing variables.
+This allows modular design where submodules can be removed with the remaining
+parts still working.
 
