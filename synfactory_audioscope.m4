@@ -4,6 +4,8 @@ DefWindow([theAudioOutputScope], "Audio Output Scope", [audioOutputScopeHandler]
 
 DefConst([static const int OUTPUT_SCOPE_BUFFER_SIZE=1024;])
 DefVar([static int theAudioOutputScopeMode=0;])
+DefVar([static signed short audioScopeBufferL[OUTPUT_SCOPE_BUFFER_SIZE];])
+DefVar([static signed short audioScopeBufferR[OUTPUT_SCOPE_BUFFER_SIZE];])
 
 PrefColorSelector([OUTPUT_SCOPE_BGCOL], [Audio Output Scope Color], [theAudioOutputScopeBgColor], [COLOR_BLACK])
 PrefColorSelector([OUTPUT_SCOPE_BLINE], [Audio Output Scope Base Color], [theAudioOutputScopeBaseColor], [0x00BB00])
@@ -23,18 +25,16 @@ static void drawScopeTopBottom(Context_ptr_t aContext) {
 
 	yRange=((aContext->clientRect.bottom-16)/4);
 
-	/* reenable this when able
-	guiSelectPen1Color(aContext, 0xFFFFFF);
-	guiDrawLineFrom(aContext, 0, yRange-(DSP_ScopeL[0]*yRange)/32768);
+	guiSelectPenColor(aContext, theAudioOutputScopeTraceColor, 1);
+	guiDrawLineFrom(aContext, 0, yRange-(audioScopeBufferL[0]*yRange)/32768);
 	for(cnt=1; cnt<OUTPUT_SCOPE_BUFFER_SIZE; cnt++) {
-		guiDrawLineTo(aContext, (cnt*aContext->clientRect.right)/OUTPUT_SCOPE_BUFFER_SIZE, yRange-(DSP_ScopeL[cnt]*yRange)/32768);
+		guiDrawLineTo(aContext, (cnt*aContext->clientRect.right)/OUTPUT_SCOPE_BUFFER_SIZE, yRange-(audioScopeBufferL[cnt]*yRange)/32768);
 	}
 
-	guiDrawLineFrom(aContext, 0, 3*yRange+16-(DSP_ScopeR[0]*yRange)/32768);
+	guiDrawLineFrom(aContext, 0, 3*yRange+16-(audioScopeBufferR[0]*yRange)/32768);
 	for(cnt=1; cnt<OUTPUT_SCOPE_BUFFER_SIZE; cnt++) {
-		guiDrawLineTo(aContext, (cnt*aContext->clientRect.right)/OUTPUT_SCOPE_BUFFER_SIZE, 3*yRange+16-(DSP_ScopeR[cnt]*yRange)/32768);
+		guiDrawLineTo(aContext, (cnt*aContext->clientRect.right)/OUTPUT_SCOPE_BUFFER_SIZE, 3*yRange+16-(audioScopeBufferR[cnt]*yRange)/32768);
 	}
-	*/
 	
 	// Draw base lines
 	guiSelectPenColor(aContext, theAudioOutputScopeBaseColor, 1);
@@ -65,17 +65,17 @@ static void drawScopeLeftRight(Context_ptr_t aContext) {
 
 	guiSelectPenColor(aContext, theAudioOutputScopeTraceColor, 1);
 	
-	/* reenable this when able
-	guiDrawLineFrom(aContext, 0, yRange-(DSP_ScopeL[0]*yRange)/32768);
+	
+	guiDrawLineFrom(aContext, 0, yRange-(audioScopeBufferL[0]*yRange)/32768);
 	for(cnt=1; cnt<OUTPUT_SCOPE_BUFFER_SIZE; cnt++) {
-		guiDrawLineTo(aContext, (cnt*xRange)/OUTPUT_SCOPE_BUFFER_SIZE, yRange-(DSP_ScopeL[cnt]*yRange)/32768);
+		guiDrawLineTo(aContext, (cnt*xRange)/OUTPUT_SCOPE_BUFFER_SIZE, yRange-(audioScopeBufferL[cnt]*yRange)/32768);
 	}
 
-	guiDrawLineFrom(aContext, xRange+16, yRange-(DSP_ScopeR[0]*yRange)/32768);
+	guiDrawLineFrom(aContext, xRange+16, yRange-(audioScopeBufferR[0]*yRange)/32768);
 	for(cnt=1; cnt<OUTPUT_SCOPE_BUFFER_SIZE; cnt++) {
-		guiDrawLineTo(aContext, (cnt*xRange)/OUTPUT_SCOPE_BUFFER_SIZE+xRange+16, yRange-(DSP_ScopeR[cnt]*yRange)/32768);
+		guiDrawLineTo(aContext, (cnt*xRange)/OUTPUT_SCOPE_BUFFER_SIZE+xRange+16, yRange-(audioScopeBufferR[cnt]*yRange)/32768);
 	}
-	*/
+	
 
 	// Draw base lines
 	guiSelectPenColor(aContext, theAudioOutputScopeBaseColor, 1);
@@ -92,6 +92,15 @@ static void drawScopeLeftRight(Context_ptr_t aContext) {
 	//DSP_ScopePosition = 0;
 }
 
+static void audioDebugFillBuffer()
+{
+	for(int c = 0; c < OUTPUT_SCOPE_BUFFER_SIZE; c++)
+	{
+		audioScopeBufferL[c] = rand() - (32768>>1);
+		audioScopeBufferR[c] = rand() - (32768>>1);
+	}
+}
+
 static void audioOutputScopeHandler(Context_ptr_t aContext) {
 	int yRange = 0;
 	
@@ -100,7 +109,7 @@ static void audioOutputScopeHandler(Context_ptr_t aContext) {
 		break;
 	case GUI_EVENT_REFRESH:
 		logprintf("audioOutputScopeHandler refresh\n");
-		
+		audioDebugFillBuffer();
 		switch(theAudioOutputScopeMode)
 		{
 			case 0: // top bottom
