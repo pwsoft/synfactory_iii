@@ -28,7 +28,7 @@ DefVar([static ATOM mainClassAtom;])
 
 DefVar([static HPEN theCurrentPen = NULL;])
 DefVar([static HBRUSH theCurrentBrush = NULL;])
-DefVar([static int currentAlignment = DT_TOP | DT_LEFT;])
+DefVar([static int currentAlignment = alignTopLeft;])
 
 
 # 1=name, 2=title, 3=handler, 4=xsize, 5=ysize, 6=scroll, 7=main window flag
@@ -75,6 +75,11 @@ static void guiSelectFillColor(Context_ptr_t aContext, color_t color)
 	}
 	if (theCurrentBrush) DeleteObject(theCurrentBrush);
 	theCurrentBrush=newBrush;
+}
+
+static void guiSetTextAlignment(Context_ptr_t aContext, int aAlignment)
+{
+	currentAlignment = aAlignment;
 }
 
 static void guiDrawLine(Context_ptr_t aContext, int aStartX, int aStartY, int aEndX, int aEndY) {

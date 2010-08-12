@@ -42,11 +42,11 @@ static void drawScopeTopBottom(Context_ptr_t aContext) {
 	guiDrawLine(aContext, 0, 3*yRange+16, aContext->clientRect.right, 3*yRange+16);
 
 	//guiSelectTitleFont(aContext);
-	//guiDrawTransparent(aContext);
-	//guiSetTextAlignment(aContext, alignBottomLeft);
-	//guiSelectPen1Color(aContext, 0x00BB00);
-	//guiDrawText(aContext, 2, 0, aContext->clientRect.right, yRange, "Left");
-	//guiDrawText(aContext, 2, 0, aContext->clientRect.right, 3*yRange+16, "Right");
+	guiDrawTransparent(aContext);
+	guiSetTextAlignment(aContext, alignBottomLeft);
+	guiSelectPenColor(aContext, theAudioOutputScopeBaseColor, 1);
+	guiDrawText(aContext, 2, 0, aContext->clientRect.right, yRange, "Left");
+	guiDrawText(aContext, 2, 0, aContext->clientRect.right, 3*yRange+16, "Right");
 
 	//DSP_ScopePosition = 0;
 }
@@ -83,22 +83,13 @@ static void drawScopeLeftRight(Context_ptr_t aContext) {
 	guiDrawLine(aContext, xRange+16, yRange, aContext->clientRect.right, yRange);
 
 	//guiSelectTitleFont(aContext);
-	//guiDrawTransparent(aContext);
-	//guiSetTextAlignment(aContext, alignBottomLeft);
-	//guiSelectPen1Color(aContext, 0x00BB00);
-	//guiDrawText(aContext, 2, 0, aContext->clientRect.right, yRange, "Left");
-	//guiDrawText(aContext, xRange+18, 0, aContext->clientRect.right, yRange, "Right");
+	guiDrawTransparent(aContext);
+	guiSetTextAlignment(aContext, alignBottomLeft);
+	guiSelectPenColor(aContext, theAudioOutputScopeBaseColor, 1);
+	guiDrawText(aContext, 2, 0, aContext->clientRect.right, yRange, "Left");
+	guiDrawText(aContext, xRange+18, 0, aContext->clientRect.right, yRange, "Right");
 
 	//DSP_ScopePosition = 0;
-}
-
-static void audioDebugFillBuffer()
-{
-	for(int c = 0; c < OUTPUT_SCOPE_BUFFER_SIZE; c++)
-	{
-		audioScopeBufferL[c] = rand() - (32768>>1);
-		audioScopeBufferR[c] = rand() - (32768>>1);
-	}
 }
 
 static void audioOutputScopeHandler(Context_ptr_t aContext) {
@@ -109,7 +100,7 @@ static void audioOutputScopeHandler(Context_ptr_t aContext) {
 		break;
 	case GUI_EVENT_REFRESH:
 		logprintf("audioOutputScopeHandler refresh\n");
-		audioDebugFillBuffer();
+
 		switch(theAudioOutputScopeMode)
 		{
 			case 0: // top bottom
@@ -119,19 +110,6 @@ static void audioOutputScopeHandler(Context_ptr_t aContext) {
 				drawScopeLeftRight(aContext);
 				break;
 		}
-		
-		/*
-		yRange=((aContext->clientRect.bottom-16)/4);
-		
-		SelectObject(aContext->currentHdc, GetStockObject(WHITE_BRUSH));
-		guiSelectFillColor(aContext, theAudioOutputScopeBgColor);
-		Rectangle(aContext->currentHdc, aContext->clientRect.left, aContext->clientRect.top, aContext->clientRect.right, aContext->clientRect.bottom);		
-
-		// Draw base lines
-		guiSelectPenColor(aContext, theAudioOutputScopeBaseColor, 1);
-		guiDrawLine(aContext, 0, yRange, aContext->clientRect.right,   yRange);
-		guiDrawLine(aContext, 0, 3*yRange+16, aContext->clientRect.right, 3*yRange+16);
-		*/
 		break;
 	case GUI_EVENT_MOUSE_R_DOWN:
 		theAudioOutputScopeMode=1-theAudioOutputScopeMode;
