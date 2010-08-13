@@ -169,12 +169,142 @@ static inline void guiShowWindow(HWND aWindow) {
 	(void)SetFocus(aWindow);
 }
 
+static void guiRefreshWindow(HWND window, int left, int top, int right, int bottom)  {
+	RECT myRect={left, top, right, bottom};
+	(void)InvalidateRect(window, &myRect, FALSE);
+}
+
+static void guiRefreshWindow(HWND window) {
+	(void)InvalidateRect(window, (RECT *)NULL, FALSE);
+}
+
+
 static void guiSetWindowTitle(HWND aWindow, const char *aTitle) {
 	SetWindowText(aWindow, aTitle);
 }
 
 static inline bool guiIsWindowVisible(HWND aWindow) {
 	return (IsWindowVisible(aWindow) == TRUE);
+}
+
+]])
+
+code5([block([Scroll bar control (gdi)])[
+
+static void guiHScrollWindowTo(HWND window, int pos) {
+	SCROLLINFO myScrollInfo;
+	int oldPos;
+	int page;
+
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS | SIF_TRACKPOS | SIF_PAGE | SIF_RANGE;
+	GetScrollInfo(window, SB_HORZ, &myScrollInfo);
+
+	oldPos = myScrollInfo.nPos;
+	myScrollInfo.nPos=pos;
+	page=(int)myScrollInfo.nPage;
+
+	if (myScrollInfo.nPos<myScrollInfo.nMin) myScrollInfo.nPos=myScrollInfo.nMin;
+	if (myScrollInfo.nPos>myScrollInfo.nMax-page) myScrollInfo.nPos=max(myScrollInfo.nMin, myScrollInfo.nMax-page);
+	if (oldPos != myScrollInfo.nPos) {
+		myScrollInfo.cbSize=sizeof(myScrollInfo);
+		myScrollInfo.fMask=SIF_POS;
+		SetScrollInfo(window, SB_HORZ, &myScrollInfo, TRUE);
+		guiRefreshWindow(window);
+	}
+}
+
+static void guiVScrollWindowTo(HWND window, int pos) {
+	SCROLLINFO myScrollInfo;
+	int oldPos;
+	int page;
+
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS | SIF_TRACKPOS | SIF_PAGE | SIF_RANGE;
+	GetScrollInfo(window, SB_VERT, &myScrollInfo);
+
+	oldPos = myScrollInfo.nPos;
+	myScrollInfo.nPos = pos;
+	page=(int)myScrollInfo.nPage;
+
+	if (myScrollInfo.nPos<myScrollInfo.nMin) myScrollInfo.nPos=myScrollInfo.nMin;
+	if (myScrollInfo.nPos>myScrollInfo.nMax-page) myScrollInfo.nPos=max(myScrollInfo.nMin, myScrollInfo.nMax-page);
+	if (oldPos != myScrollInfo.nPos) {
+		myScrollInfo.cbSize=sizeof(myScrollInfo);
+		myScrollInfo.fMask=SIF_POS;
+		SetScrollInfo(window, SB_VERT, &myScrollInfo, TRUE);
+		guiRefreshWindow(window);
+	}
+}
+
+static void guiHScrollRange(HWND window, int aMininum, int aMaximum, int aPage) {
+	SCROLLINFO myScrollInfo;
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS | SIF_PAGE | SIF_RANGE;
+	GetScrollInfo(window, SB_HORZ, &myScrollInfo);
+	myScrollInfo.nMin=aMininum;
+	myScrollInfo.nMax=aMaximum;
+	myScrollInfo.nPage=aPage;
+
+	if (myScrollInfo.nPos<myScrollInfo.nMin) myScrollInfo.nPos=myScrollInfo.nMin;
+	if (myScrollInfo.nPos>myScrollInfo.nMax-aPage) myScrollInfo.nPos=max(myScrollInfo.nMin, myScrollInfo.nMax-aPage);
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS | SIF_PAGE | SIF_RANGE | SIF_DISABLENOSCROLL;
+	SetScrollInfo(window, SB_HORZ, &myScrollInfo, TRUE);
+}
+
+static void guiVScrollRange(HWND window, int aMininum, int aMaximum, int aPage) {
+	SCROLLINFO myScrollInfo;
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS | SIF_PAGE | SIF_RANGE;
+	GetScrollInfo(window, SB_VERT, &myScrollInfo);
+	myScrollInfo.nMin=aMininum;
+	myScrollInfo.nMax=aMaximum;
+	myScrollInfo.nPage=aPage;
+
+	if (myScrollInfo.nPos<myScrollInfo.nMin) myScrollInfo.nPos=myScrollInfo.nMin;
+	if (myScrollInfo.nPos>myScrollInfo.nMax-aPage) myScrollInfo.nPos=max(myScrollInfo.nMin, myScrollInfo.nMax-aPage);
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS | SIF_PAGE | SIF_RANGE | SIF_DISABLENOSCROLL;
+	SetScrollInfo(window, SB_VERT, &myScrollInfo, TRUE);
+}
+
+static int guiGetHScrollPos(HWND window) {
+	SCROLLINFO myScrollInfo;
+
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS;
+	GetScrollInfo(window, SB_HORZ, &myScrollInfo);
+	return myScrollInfo.nPos;
+}
+
+static int guiGetVScrollPos(HWND window) {
+	SCROLLINFO myScrollInfo;
+
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS;
+	GetScrollInfo(window, SB_VERT, &myScrollInfo);
+	return myScrollInfo.nPos;
+}
+
+static void guiSetHScrollPos(HWND window, int pos) {
+	SCROLLINFO myScrollInfo;
+
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS;
+	myScrollInfo.nPos=pos;
+	SetScrollInfo(window, SB_HORZ, &myScrollInfo, TRUE);
+	guiRefreshWindow(window);
+}
+
+static void guiSetVScrollPos(HWND window, int pos) {
+	SCROLLINFO myScrollInfo;
+
+	myScrollInfo.cbSize=sizeof(myScrollInfo);
+	myScrollInfo.fMask=SIF_POS;
+	myScrollInfo.nPos=pos;
+	SetScrollInfo(window, SB_VERT, &myScrollInfo, TRUE);
+	guiRefreshWindow(window);
 }
 
 ]])
