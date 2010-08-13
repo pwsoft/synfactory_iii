@@ -22,6 +22,14 @@ static void preferencesDrawHeader(Context_ptr_t aContext, int x, int &y, Lang_t 
 	guiDrawText(aContext, x, y, s, strlen(s));
 	y += 14;
 }
+static void configWindowHeader2(Context_ptr_t aContext, int x, int &y, Lang_t aString) {
+	const char *s = _(aString);
+	guiSelectFillColor(aContext, COLOR_WHITE);
+	guiSelectPenColor(aContext, 0x446688, 1);
+	guiDrawText(aContext, x, y, s, strlen(s));
+	y += 14;
+}
+
 
 static int colorNotMask[3]={0xFFFF00,0xFF00FF,0x00FFFF};
 static int colorMask[3]={0x0000FF,0x00FF00,0xFF0000};
@@ -71,7 +79,7 @@ static void preferencesWindowHandler(Context_ptr_t aContext) {
 
 	switch(aContext->currentEvent) {
 	case GUI_EVENT_REFRESH:
-//		guiSetTextAlignment(aContext, alignTopLeft);
+		guiSetTextAlignment(aContext, alignTopLeft);
 		guiSelectPenColor(aContext, -1, 0);
 		guiSelectFillColor(aContext, COLOR_WHITE);
 		guiDrawRect(aContext, aContext->clientRect.left, aContext->clientRect.top, aContext->clientRect.right, aContext->clientRect.bottom);]
