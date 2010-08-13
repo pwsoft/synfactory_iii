@@ -356,6 +356,80 @@ static LRESULT CALLBACK stdWindowProc(HWND aWindow, UINT uMsg, WPARAM wParam, LP
 			InvalidateRect(aWindow, NULL, FALSE);
 		} break;
 
+	case WM_HSCROLL: {
+			SCROLLINFO myScrollInfo;
+			myScrollInfo.cbSize=sizeof(myScrollInfo);
+			myScrollInfo.fMask=SIF_POS | SIF_TRACKPOS | SIF_PAGE | SIF_RANGE;
+			GetScrollInfo(aWindow, SB_HORZ, &myScrollInfo);
+			int page=(int)myScrollInfo.nPage;
+			int oldPos=myScrollInfo.nPos;
+		
+			switch(LOWORD(wParam)) {
+			case SB_PAGEUP:
+				myScrollInfo.nPos-=myScrollInfo.nPage;
+				break;
+			case SB_LINEUP:
+				myScrollInfo.nPos-=16;
+				break;
+			case SB_PAGEDOWN:
+				myScrollInfo.nPos+=myScrollInfo.nPage;
+				break;
+			case SB_LINEDOWN:
+				myScrollInfo.nPos+=16;
+				break;
+			case SB_THUMBTRACK:
+				myScrollInfo.nPos=myScrollInfo.nTrackPos;
+				break;
+			default:
+				break;
+			}
+
+			if (myScrollInfo.nPos<myScrollInfo.nMin) myScrollInfo.nPos=myScrollInfo.nMin;
+			if (myScrollInfo.nPos>myScrollInfo.nMax-page) myScrollInfo.nPos=myScrollInfo.nMax-page;
+			if (oldPos != myScrollInfo.nPos) {
+				myScrollInfo.cbSize=sizeof(myScrollInfo);
+				myScrollInfo.fMask=SIF_POS;
+				SetScrollInfo(aWindow, SB_HORZ, &myScrollInfo, TRUE);
+				InvalidateRect(aWindow, NULL, FALSE);
+			}
+		} break;
+	case WM_VSCROLL: {
+			SCROLLINFO myScrollInfo;
+			myScrollInfo.cbSize=sizeof(myScrollInfo);
+			myScrollInfo.fMask=SIF_POS | SIF_TRACKPOS | SIF_PAGE | SIF_RANGE;
+			GetScrollInfo(aWindow, SB_VERT, &myScrollInfo);
+			int page=(int)myScrollInfo.nPage;
+			int oldPos=myScrollInfo.nPos;
+		
+			switch(LOWORD(wParam)) {
+			case SB_PAGEUP:
+				myScrollInfo.nPos-=myScrollInfo.nPage;
+				break;
+			case SB_LINEUP:
+				myScrollInfo.nPos-=16;
+				break;
+			case SB_PAGEDOWN:
+				myScrollInfo.nPos+=myScrollInfo.nPage;
+				break;
+			case SB_LINEDOWN:
+				myScrollInfo.nPos+=16;
+				break;
+			case SB_THUMBTRACK:
+				myScrollInfo.nPos=myScrollInfo.nTrackPos;
+				break;
+			default:
+				break;
+			}
+
+			if (myScrollInfo.nPos<myScrollInfo.nMin) myScrollInfo.nPos=myScrollInfo.nMin;
+			if (myScrollInfo.nPos>myScrollInfo.nMax-page) myScrollInfo.nPos=max(myScrollInfo.nMin, myScrollInfo.nMax-page);
+			if (oldPos != myScrollInfo.nPos) {
+				myScrollInfo.cbSize=sizeof(myScrollInfo);
+				myScrollInfo.fMask=SIF_POS;
+				SetScrollInfo(aWindow, SB_VERT, &myScrollInfo, TRUE);
+				InvalidateRect(aWindow, NULL, FALSE);
+			}
+		} break;
 	case WM_PAINT: {
 			PAINTSTRUCT ps;
 			HDC hdc=BeginPaint(aWindow, &ps);
