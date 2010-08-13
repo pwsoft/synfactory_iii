@@ -2,10 +2,9 @@ module([audio output scope])
 
 DefWindow([theAudioOutputScope], "Audio Output Scope", [audioOutputScopeHandler], 400, 400)
 
-DefConst([static const int OUTPUT_SCOPE_BUFFER_SIZE=1024;])
-DefVar([static int theAudioOutputScopeMode=0;])
-DefVar([static signed short audioScopeBufferL[OUTPUT_SCOPE_BUFFER_SIZE];])
-DefVar([static signed short audioScopeBufferR[OUTPUT_SCOPE_BUFFER_SIZE];])
+DefSetVar([int], [theAudioOutputScopeMode], [0])
+SynFileDecimal([OUTPUT_SCOPE_MODE], [theAudioOutputScopeMode]);
+WatchVar([theAudioOutputScopeMode], [theAudioOutputScopeRefresh = true;])
 
 PrefColorSelector([OUTPUT_SCOPE_BGCOL], [Audio Output Scope Color], [theAudioOutputScopeBgColor], [COLOR_BLACK])
 PrefColorSelector([OUTPUT_SCOPE_BLINE], [Audio Output Scope Base Color], [theAudioOutputScopeBaseColor], [0x00BB00])
@@ -13,6 +12,10 @@ PrefColorSelector([OUTPUT_SCOPE_TRACE], [Audio Output Scope Trace Color], [theAu
 WatchVar([theAudioOutputScopeBgColor], [theAudioOutputScopeRefresh = true;])
 WatchVar([theAudioOutputScopeBaseColor], [theAudioOutputScopeRefresh = true;])
 WatchVar([theAudioOutputScopeTraceColor], [theAudioOutputScopeRefresh = true;])
+
+DefConst([static const int OUTPUT_SCOPE_BUFFER_SIZE=1024;])
+DefVar([static signed short audioScopeBufferL[OUTPUT_SCOPE_BUFFER_SIZE];])
+DefVar([static signed short audioScopeBufferR[OUTPUT_SCOPE_BUFFER_SIZE];])
 
 code7([block([Audio Output Scope event handler])[
 static void drawScopeTopBottom(Context_ptr_t aContext) {
@@ -112,8 +115,7 @@ static void audioOutputScopeHandler(Context_ptr_t aContext) {
 		}
 		break;
 	case GUI_EVENT_MOUSE_R_DOWN:
-		theAudioOutputScopeMode=1-theAudioOutputScopeMode;
-		theAudioOutputScopeRefresh=true;
+		]SetVar([theAudioOutputScopeMode], [1-theAudioOutputScopeMode])[
 		break;
 	default:
 		break;

@@ -2,6 +2,10 @@ module([SYN load/save])
 
 define([__synload],)
 define([__synsave_settings],)
+define([SynFileDecimal],[
+	MacroBack([__synload], [[if (strcmp(command, "$1") == 0) { color_t t; fscanf(synfile, "%d", &t); ]SetVar($2, t) }])
+	MacroBack([__synsave_settings], [[fprintf(synfile, "$1 %d\n", $2);]])
+])
 define([SynFileHex],[
 	MacroBack([__synload], [[if (strcmp(command, "$1") == 0) { color_t t; fscanf(synfile, "%x", &t); ]SetVar($2, t) }])
 	MacroBack([__synsave_settings], [[fprintf(synfile, "$1 %08X\n", $2);]])
