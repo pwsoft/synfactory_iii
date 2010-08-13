@@ -179,6 +179,11 @@ static inline bool guiIsWindowVisible(HWND aWindow) {
 
 ]])
 
+code8([block([Timer events (gdi)])[
+static void guiRunTimer(HWND aWindow, int aTimeMs) {
+	SetTimer(aWindow, 0, aTimeMs, NULL);
+}
+]])
 
 code8([block([Default window event handler (gdi)])[
 static void sendEvent(Context_t *aContext, HWND aWindow, GuiEvent_t event, int mouseX, int mouseY) {
