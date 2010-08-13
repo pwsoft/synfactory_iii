@@ -14,6 +14,24 @@ static void mainWindowHandler(Context_ptr_t aContext) {
 		case MENU_PROJECT_BROWSER:
 			guiShowWindow(theProjectsWindow);
 			break;
+		case MENU_COLOR_SELECTOR:
+			guiShowWindow(theColorSelectorWindow);
+			break;
+		case MENU_TRANSPORT:
+			guiShowWindow(theTransportWindow);
+			break;
+		case MENU_AUDIO_SCOPE:
+			guiShowWindow(theAudioOutputScope);
+			break;
+		case MENU_AUDIO_MIXER: break;    // no window defined yet
+		case MENU_VIDEO_PREVIEW: break;  // no window defined yet
+		case MENU_MESSAGES: break;       // no window defined yet
+		case MENU_PREFERENCES:
+			guiShowWindow(thePreferencesWindow);
+			break;
+		case MENU_ABOUT:
+			guiShowWindow(theHelpWindow);
+			break;
 		default:
 			break;
 		}
