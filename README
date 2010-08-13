@@ -40,7 +40,7 @@ Code blocks
 -------------------
 
 code1
-	- convert enum to string functions
+	- convert enum to string functions (for diagnostics and debugging only)
 code2
 	- Log file
 code3
