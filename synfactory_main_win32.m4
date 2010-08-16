@@ -37,6 +37,8 @@ code9([block([Main])
 indent(1,__init)
 [	SetMenu(theMainWindow, generateMainMenu());]
 [	SynFileLoad("autoload.syn");]
+[	createNewProject();]
+[	createNewProject();]
 [	eventloop();]
 [	SynFileSave("autoload.syn");]
 indent(1,__term)
