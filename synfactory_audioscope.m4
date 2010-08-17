@@ -96,21 +96,24 @@ static void drawScopeLeftRight(Context_ptr_t aContext) {
 }
 
 static void audioOutputScopeHandler(Context_ptr_t aContext) {
-	int yRange = 0;
-	
 	switch(aContext->currentEvent) {
 	case GUI_EVENT_TIMER:
 		break;
 	case GUI_EVENT_REFRESH:
 		logprintf("audioOutputScopeHandler refresh\n");
 
-		switch(theAudioOutputScopeMode)
-		{
-			case 0: // top bottom
+		switch(theAudioOutputScopeMode) {
+			case 0:
+				// top bottom
 				drawScopeTopBottom(aContext);
 				break;
-			case 1: // left right
+			case 1:
+				// left right
 				drawScopeLeftRight(aContext);
+				break;
+			default:
+				// Fix wrong mode
+				]SetVar([theAudioOutputScopeMode], 0)[
 				break;
 		}
 		break;

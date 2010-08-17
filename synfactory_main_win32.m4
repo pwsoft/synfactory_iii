@@ -32,6 +32,9 @@ indent(3,__eventloop)[
 #
 code9([block([Main])
 [int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
+	UNUSED(hPrevInstance);
+	UNUSED(szCmdLine);
+	UNUSED(iCmdShow);
 	theInstance = hInstance;]
 [// int main(int argc, char **argv) {]
 indent(1,__init)

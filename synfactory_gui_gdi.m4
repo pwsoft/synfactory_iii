@@ -8,6 +8,7 @@ Def([#define COLOR_WHITE 0x00FFFFFF])
 Struct([Context], [HWND currentWindow;])
 Struct([Context], [HDC currentHdc;])
 Struct([Context], [RECT clientRect;])
+Struct([Context], [int textAlignment;])
 Typedef([typedef int color_t;])
 DefCallback([typedef void (*GuiCallback_t)(Context_ptr_t);])
 
@@ -28,7 +29,6 @@ DefVar([static ATOM mainClassAtom;])
 
 DefVar([static HPEN theCurrentPen = NULL;])
 DefVar([static HBRUSH theCurrentBrush = NULL;])
-DefVar([static int currentAlignment = alignTopLeft;])
 
 
 # 1=name, 2=title, 3=handler, 4=xsize, 5=ysize, 6=scroll, 7=main window flag
@@ -79,7 +79,7 @@ static void guiSelectFillColor(Context_ptr_t aContext, color_t color)
 
 static void guiSetTextAlignment(Context_ptr_t aContext, int aAlignment)
 {
-	currentAlignment = aAlignment;
+	aContext->textAlignment = aAlignment;
 }
 
 static void guiDrawLine(Context_ptr_t aContext, int aStartX, int aStartY, int aEndX, int aEndY) {
@@ -119,14 +119,14 @@ static void guiDrawTransparent(Context_ptr_t aContext) {
 	(void)SetBkMode(aContext->currentHdc, TRANSPARENT);
 }
 
-static void guiDrawText(Context_ptr_t aContext, int left, int top, int right, int bottom, const char *text, size_t count=-1) {
+static void guiDrawText(Context_ptr_t aContext, int left, int top, int right, int bottom, const char *text, int count=-1) {
 	RECT myRect={left, top, right, bottom};
-	DrawText(aContext->currentHdc, text, (int)count, &myRect, currentAlignment | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP);
+	DrawText(aContext->currentHdc, text, count, &myRect, aContext->textAlignment | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP);
 }
 
-static void guiDrawText(Context_ptr_t aContext, int left, int top, const char *text, size_t count=-1) {
+static void guiDrawText(Context_ptr_t aContext, int left, int top, const char *text, int count=-1) {
 	RECT myRect={left, top, left, top};
-	DrawText(aContext->currentHdc, text, (int)count, &myRect, currentAlignment | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP);
+	DrawText(aContext->currentHdc, text, count, &myRect, aContext->textAlignment | DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP);
 }
 
 static void guiCalcTextSize(Context_ptr_t aContext, int *xSize, int *ySize, const char *text, int count) {
@@ -322,6 +322,7 @@ static void sendEvent(Context_t *aContext, HWND aWindow, GuiEvent_t event, int m
 	if (myCallback) {
 		aContext->currentEvent = event;
 		aContext->currentWindow = aWindow;
+		aContext->textAlignment = alignTopLeft;
 		aContext->mouseX = mouseX;
 		aContext->mouseY = mouseY;
 		GetClientRect(aWindow, &(aContext->clientRect));
@@ -338,18 +339,9 @@ static LRESULT CALLBACK stdWindowProc(HWND aWindow, UINT uMsg, WPARAM wParam, LP
 	switch(uMsg) {
 	case WM_COMMAND: {
 			if (HIWORD(wParam) == 0) {
-				myContext.currentEvent = GUI_EVENT_MENU;
-				myContext.currentWindow = aWindow;
-				myContext.currentMenu = (Menu_t)LOWORD(wParam);
-// TODO:				myContext.currentHdc = hdc;
-				GetClientRect(aWindow, &(myContext.clientRect));
-
 				logprintf("Menu item %d %s\n", LOWORD(wParam), convertMenuToString(myContext.currentMenu));
-
-				GuiCallback_t myCallback = (GuiCallback_t)GetWindowLong(aWindow, 0);
-				if (myCallback) {
-					myCallback(&myContext);					
-				}
+				myContext.currentMenu = (Menu_t)LOWORD(wParam);
+				sendEvent(&myContext, aWindow, GUI_EVENT_MENU, 0, 0);
 			}
 		} break;
 	case WM_SIZE: {

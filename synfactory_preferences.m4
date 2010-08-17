@@ -19,14 +19,14 @@ static void preferencesDrawHeader(Context_ptr_t aContext, int x, int &y, Lang_t 
 	const char *s = _(aString);
 	guiSelectFillColor(aContext, COLOR_WHITE);
 	guiSelectPenColor(aContext, 0x004466, 1);
-	guiDrawText(aContext, x, y, s, strlen(s));
+	guiDrawText(aContext, x, y, s);
 	y += 14;
 }
 static void configWindowHeader2(Context_ptr_t aContext, int x, int &y, Lang_t aString) {
 	const char *s = _(aString);
 	guiSelectFillColor(aContext, COLOR_WHITE);
 	guiSelectPenColor(aContext, 0x446688, 1);
-	guiDrawText(aContext, x, y, s, strlen(s));
+	guiDrawText(aContext, x, y, s);
 	y += 14;
 }
 

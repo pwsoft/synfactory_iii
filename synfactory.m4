@@ -31,6 +31,7 @@ define(EXENAME,[synfactory_iii])
 define(PROGRAM,[SynFactory III])
 define(VERSION,[20100812])
 
+Def([#define UNUSED(x) ((void)(0 && (x)))])
 DefConst([static const char theProgramName[]="]PROGRAM - VERSION[";])
 platforminclude([synfactory_logfile])
 platforminclude([synfactory_language])
