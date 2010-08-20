@@ -347,7 +347,6 @@ static LRESULT CALLBACK stdWindowProc(HWND aWindow, UINT uMsg, WPARAM wParam, LP
 	case WM_SIZE: {
 			InvalidateRect(aWindow, NULL, FALSE);
 		} break;
-
 	case WM_HSCROLL: {
 			SCROLLINFO myScrollInfo;
 			myScrollInfo.cbSize=sizeof(myScrollInfo);
@@ -441,6 +440,12 @@ static LRESULT CALLBACK stdWindowProc(HWND aWindow, UINT uMsg, WPARAM wParam, LP
 
 			EndPaint(aWindow, &ps);
 
+		} break;
+	case WM_TIMER: {
+			POINT p;
+			GetCursorPos(&p);
+			ScreenToClient(aWindow, &p);
+			sendEvent(&myContext, aWindow, GUI_EVENT_TIMER, p.x, p.y);
 		} break;
 	case WM_LBUTTONDOWN:
 		sendEvent(&myContext, aWindow, GUI_EVENT_MOUSE_L_DOWN, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
