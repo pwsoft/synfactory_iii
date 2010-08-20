@@ -10,6 +10,7 @@ Struct([Context], [HDC currentHdc;])
 Struct([Context], [RECT clientRect;])
 Struct([Context], [int textAlignment;])
 Typedef([typedef int color_t;])
+Typedef([typedef HWND GuiWindow_t;])
 DefCallback([typedef void (*GuiCallback_t)(Context_ptr_t);])
 
 DefConst([static const char * const mainWindowClass="StudioFactoryMainClass";])
@@ -185,6 +186,23 @@ static void guiSetWindowTitle(HWND aWindow, const char *aTitle) {
 
 static inline bool guiIsWindowVisible(HWND aWindow) {
 	return (IsWindowVisible(aWindow) == TRUE);
+}
+
+static bool guiIsWindowMaximized(HWND aWindow) {
+	WINDOWPLACEMENT winpos;
+	winpos.length = sizeof(WINDOWPLACEMENT);
+	GetWindowPlacement(aWindow, &winpos);
+	return (SW_SHOWMAXIMIZED==winpos.showCmd);
+}
+
+static void guiGetWindowPosition(HWND aWindow, int *xPtr, int *yPtr, int *hPtr, int *wPtr) {
+	WINDOWPLACEMENT winpos;
+	winpos.length = sizeof(WINDOWPLACEMENT);
+	GetWindowPlacement(aWindow, &winpos);
+	*xPtr = winpos.rcNormalPosition.left;
+	*yPtr = winpos.rcNormalPosition.top;
+	*wPtr = winpos.rcNormalPosition.right-winpos.rcNormalPosition.left;
+	*hPtr = winpos.rcNormalPosition.bottom-winpos.rcNormalPosition.top;
 }
 
 ]])
