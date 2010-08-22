@@ -142,7 +142,7 @@ static void guiDraw3dFill(Context_ptr_t aContext, int left, int top, int right, 
 	DrawEdge(aContext->currentHdc, &myRect, EDGE_SUNKEN, BF_MIDDLE);
 }
 
-void guiDraw3dRect(Context_ptr_t aContext, int left, int top, int right, int bottom, bool pressed) {
+static void guiDraw3dRect(Context_ptr_t aContext, int left, int top, int right, int bottom, bool pressed) {
 	RECT myRect={left, top, right, bottom};
 	if (theCurrentBrush) {
 		(void)FillRect(aContext->currentHdc, &myRect, theCurrentBrush);
