@@ -1,0 +1,23 @@
+
+- Scrollbar logic in preference window
+- Double buffering for DefWindow windows (scope, preference)
+- Right / Left output scope in language file
+- Load settings from autoload. (check for {{{settings)
+- Foldable Categories for preference window
+- currentPen and currentBrush into contextstruct as each hdc has one
+- Multi language.
+- Pull apart enumToString / __set functions. Put in different blocks
+- Def([#defin -> 2 parameters so #define is implicit
+- color_t to Color_t
+- Correct save name as paramater for DefWindow
+- Implement start playback functions (for transport window)
+- Implement 'new patch' function.
+
+- Transport window draw icons.
+  Call play functions in audio
+- Color selector draw 8 color icons, 1 handle icon.
+
+
+- Load stf files
+- Load softsynth files
+- Load old syn files
