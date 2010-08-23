@@ -26,6 +26,9 @@ static void mainWindowHandler(Context_ptr_t aContext) {
 		case MENU_AUDIO_MIXER: break;    // no window defined yet
 		case MENU_VIDEO_PREVIEW: break;  // no window defined yet
 		case MENU_MESSAGES: break;       // no window defined yet
+		case MENU_MIDI_KEYBOARD:
+			guiShowWindow(theVirtualKeyboardWindow);
+			break;
 		case MENU_PREFERENCES:
 			guiShowWindow(thePreferencesWindow);
 			break;

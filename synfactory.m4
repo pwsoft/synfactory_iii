@@ -53,6 +53,7 @@ platforminclude([synfactory_colorselector])
 platforminclude([synfactory_patcheditor])
 platforminclude([synfactory_audioscope])
 platforminclude([synfactory_transport])
+platforminclude([synfactory_virtual_keyboard])
 divert[]dnl
 block([[
 * SynFactory III
