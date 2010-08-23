@@ -1,6 +1,13 @@
 module([main menu])
 
 
+Enum([Menu], [MENU_NEW_PROJECT])
+Enum([Menu], [MENU_NEW_PATCH])
+Enum([Menu], [MENU_NEW_SAMPLE])
+Enum([Menu], [MENU_NEW_PATTERN])
+Enum([Menu], [MENU_NEW_MIDI_TRACK])
+Enum([Menu], [MENU_NEW_AUDIO_TRACK])
+
 Enum([Menu], [MENU_OPEN_FILE])
 Enum([Menu], [MENU_ADD_FILE])
 Enum([Menu], [MENU_CLOSE])
@@ -9,9 +16,9 @@ Enum([Menu], [MENU_SAVE_AS])
 Enum([Menu], [MENU_SAVE_ALL])
 Enum([Menu], [MENU_EXIT])
 
+Enum([Menu], [MENU_CUT])
 Enum([Menu], [MENU_COPY])
 Enum([Menu], [MENU_PASTE])
-Enum([Menu], [MENU_CUT])
 Enum([Menu], [MENU_DELETE])
 Enum([Menu], [MENU_SELECT_ALL])
 Enum([Menu], [MENU_CLONE])
@@ -34,6 +41,7 @@ Enum([Menu], [MENU_PLAY])
 Enum([Menu], [MENU_RECORD])
 
 Enum([Menu], [MENU_PREFERENCES])
+Enum([Menu], [MENU_PATCH_SETTINGS])
 Enum([Menu], [MENU_SAVE_SETTINGS_AS])
 
 Enum([Menu], [MENU_ABOUT])
@@ -44,6 +52,8 @@ Enum([Menu], [MENU_ABOUT])
 DefMenu([generateMainMenu],[
 	DefSubMenu([&File],[
 		DefSubMenu([&New...],[
+			DefMenuItem([New &Project], [MENU_NEW_PROJECT])
+			DefMenuItem([New &SynFactory Patch], [MENU_NEW_PATCH])
 		])
 		DefMenuItem([&Open], [MENU_OPEN_FILE])
 		DefMenuItem([Add/Merge file], [MENU_ADD_FILE])
@@ -93,6 +103,7 @@ DefMenu([generateMainMenu],[
 	])
 	DefSubMenu([&Settings],[
 		DefMenuItem([&Preferences], [MENU_PREFERENCES])
+		DefMenuItem([Patch &Settings], [MENU_PATCH_SETTINGS])
 		DefMenuItem([&Save settings as], [MENU_SAVE_SETTINGS_AS])
 	])
 	DefSubMenu([&Help],[
