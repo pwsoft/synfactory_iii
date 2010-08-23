@@ -1,6 +1,6 @@
 module([preferences])
 
-DefWindow([thePreferencesWindow], ["Preferences"], [preferencesWindowHandler], 400, 400, [isscrollable])
+DefWindow([thePreferencesWindow], [PREFERENCESWINDOW], ["Preferences"], [preferencesWindowHandler], 400, 400, [isscrollable])
 DefCallback([typedef void (*SetColorCallback_t)(color_t);])
 
 define([__preferences_refresh],)

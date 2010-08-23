@@ -32,16 +32,17 @@ DefVar([static HPEN theCurrentPen = NULL;])
 DefVar([static HBRUSH theCurrentBrush = NULL;])
 
 
-# 1=name, 2=title, 3=handler, 4=xsize, 5=ysize, 6=scroll, 7=main window flag
+# 1=name, 2=savename, 3=title, 4=handler, 5=xsize, 6=ysize, 7=scroll, 8=main window flag
 define([DefWindow],[
 	DefVar([static HWND $1;])
 	DefVar([static bool $1Refresh;])
-	Init(ifelse([$7],,
-		ifelse([$6],,
-			[$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);],
-			[$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, theMainWindow, NULL, theInstance, NULL);]),
-		[$1 = CreateWindowEx(0, mainWindowClass, $2, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, $4, $5, NULL, NULL, theInstance, NULL);]))
-	Init([SetWindowLong($1, 0, (LONG)$3);])
+	SynFileWindow([$2], [$1])
+	Init(ifelse([$8],,
+		ifelse([$7],,
+			[$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $3, WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, $5, $6, theMainWindow, NULL, theInstance, NULL);],
+			[$1 = CreateWindowEx(WS_EX_TOOLWINDOW, mainWindowClass, $3, WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_HSCROLL | WS_VSCROLL, CW_USEDEFAULT, CW_USEDEFAULT, $5, $6, theMainWindow, NULL, theInstance, NULL);]),
+		[$1 = CreateWindowEx(0, mainWindowClass, $3, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT, $5, $6, NULL, NULL, theInstance, NULL);]))
+	Init([SetWindowLong($1, 0, (LONG)$4);])
 	Init([UpdateWindow($1);])
 	Term([DestroyWindow($1);])
 	MacroBack([__eventloop],[if ($1Refresh) {
@@ -195,7 +196,11 @@ static bool guiIsWindowMaximized(HWND aWindow) {
 	return (SW_SHOWMAXIMIZED==winpos.showCmd);
 }
 
-static void guiGetWindowPosition(HWND aWindow, int *xPtr, int *yPtr, int *hPtr, int *wPtr) {
+static void guiMaximizeWindow(HWND aWindow) {
+	ShowWindow(aWindow, SW_MAXIMIZE);
+}
+
+static void guiGetWindowPosition(HWND aWindow, int *xPtr, int *yPtr, int *wPtr, int *hPtr) {
 	WINDOWPLACEMENT winpos;
 	winpos.length = sizeof(WINDOWPLACEMENT);
 	GetWindowPlacement(aWindow, &winpos);
@@ -203,6 +208,14 @@ static void guiGetWindowPosition(HWND aWindow, int *xPtr, int *yPtr, int *hPtr, 
 	*yPtr = winpos.rcNormalPosition.top;
 	*wPtr = winpos.rcNormalPosition.right-winpos.rcNormalPosition.left;
 	*hPtr = winpos.rcNormalPosition.bottom-winpos.rcNormalPosition.top;
+}
+
+static void guiSetWindowPosition(HWND window, int x, int y) {
+	SetWindowPos(window, NULL, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
+}
+
+static void guiSetWindowPosition(HWND window, int x, int y, int w, int h) {
+	SetWindowPos(window, NULL, x, y, w, h, SWP_NOZORDER);
 }
 
 ]])

@@ -1,6 +1,6 @@
 module([audio output scope])
 
-DefWindow([theAudioOutputScope], "Audio Output Scope", [audioOutputScopeHandler], 400, 400)
+DefWindow([theAudioOutputScope], [OUTPUTSCOPE], "Audio Output Scope", [audioOutputScopeHandler], 400, 400)
 
 DefSetVar([int], [theAudioOutputScopeMode], [0])
 SynFileDecimal([OUTPUT_SCOPE_MODE], [theAudioOutputScopeMode]);

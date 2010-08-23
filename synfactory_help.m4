@@ -1,3 +1,3 @@
 module([help/about window])
 
-DefWindow([theHelpWindow], ["About"], NULL, 400, 400, [isscrollable])
+DefWindow([theHelpWindow], [HELPWINDOW], ["About"], NULL, 400, 400, [isscrollable])

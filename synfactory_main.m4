@@ -1,6 +1,6 @@
 module([main])
 
-DefWindow([theMainWindow], ["SynFactory III"], [mainWindowHandler], 400, 400, , [ismainwindow])
+DefWindow([theMainWindow], [MAINWINDOW], ["SynFactory III"], [mainWindowHandler], 400, 400, , [ismainwindow])
 
 code7([block([Main window event handler])[
 static void mainWindowHandler(Context_ptr_t aContext) {
